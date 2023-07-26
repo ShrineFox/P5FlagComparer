@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>p5cutin.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="p5cutin.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DarkUI" Version="2.0.2" />

@@ -31,29 +31,32 @@ namespace P5FlagCompare
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tlp_Main = new TableLayoutPanel();
             listBox_Comparisons = new ListBox();
-            rtb_Output = new RichTextBox();
+            darkContextMenu_RightClick = new DarkContextMenu();
+            renameToolStripMenuItem = new ToolStripMenuItem();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
             groupBox_NewDisabled = new DarkGroupBox();
             listBox_NewlyDisabled = new ListBox();
             groupBox_NewEnabled = new DarkGroupBox();
             listBox_NewlyEnabled = new ListBox();
             tlp_Checkboxes = new TableLayoutPanel();
-            chkBox_IDGroups = new DarkCheckBox();
+            chkBox_Sections = new DarkCheckBox();
             lbl_TimeStamp = new DarkLabel();
             menuStrip_Main = new DarkMenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
-            darkContextMenu_RightClick = new DarkContextMenu();
-            renameToolStripMenuItem = new ToolStripMenuItem();
-            deleteToolStripMenuItem = new ToolStripMenuItem();
+            groupBox_AllEnabledFlags = new DarkGroupBox();
+            rtb_AllEnabledFlags = new RichTextBox();
             tlp_Main.SuspendLayout();
+            darkContextMenu_RightClick.SuspendLayout();
             groupBox_NewDisabled.SuspendLayout();
             groupBox_NewEnabled.SuspendLayout();
             tlp_Checkboxes.SuspendLayout();
             menuStrip_Main.SuspendLayout();
-            darkContextMenu_RightClick.SuspendLayout();
+            groupBox_AllEnabledFlags.SuspendLayout();
             SuspendLayout();
             // 
             // tlp_Main
@@ -63,10 +66,10 @@ namespace P5FlagCompare
             tlp_Main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
             tlp_Main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             tlp_Main.Controls.Add(listBox_Comparisons, 0, 1);
-            tlp_Main.Controls.Add(rtb_Output, 2, 1);
             tlp_Main.Controls.Add(groupBox_NewDisabled, 1, 2);
             tlp_Main.Controls.Add(groupBox_NewEnabled, 1, 1);
             tlp_Main.Controls.Add(tlp_Checkboxes, 1, 3);
+            tlp_Main.Controls.Add(groupBox_AllEnabledFlags, 2, 1);
             tlp_Main.Dock = DockStyle.Fill;
             tlp_Main.Location = new Point(0, 0);
             tlp_Main.Name = "tlp_Main";
@@ -95,20 +98,32 @@ namespace P5FlagCompare
             listBox_Comparisons.SelectedIndexChanged += SelectedComparison_Changed;
             listBox_Comparisons.KeyDown += Output_Keydown;
             // 
-            // rtb_Output
+            // darkContextMenu_RightClick
             // 
-            rtb_Output.BackColor = Color.FromArgb(60, 63, 65);
-            rtb_Output.BorderStyle = BorderStyle.None;
-            rtb_Output.Dock = DockStyle.Fill;
-            rtb_Output.ForeColor = SystemColors.InactiveBorder;
-            rtb_Output.Location = new Point(483, 48);
-            rtb_Output.Name = "rtb_Output";
-            rtb_Output.ReadOnly = true;
-            tlp_Main.SetRowSpan(rtb_Output, 3);
-            rtb_Output.Size = new Size(314, 399);
-            rtb_Output.TabIndex = 1;
-            rtb_Output.Text = "";
-            rtb_Output.KeyDown += Output_Keydown;
+            darkContextMenu_RightClick.BackColor = Color.FromArgb(60, 63, 65);
+            darkContextMenu_RightClick.ForeColor = Color.FromArgb(220, 220, 220);
+            darkContextMenu_RightClick.ImageScalingSize = new Size(20, 20);
+            darkContextMenu_RightClick.Items.AddRange(new ToolStripItem[] { renameToolStripMenuItem, deleteToolStripMenuItem });
+            darkContextMenu_RightClick.Name = "darkContextMenu_RightClick";
+            darkContextMenu_RightClick.Size = new Size(133, 52);
+            // 
+            // renameToolStripMenuItem
+            // 
+            renameToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            renameToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            renameToolStripMenuItem.Size = new Size(132, 24);
+            renameToolStripMenuItem.Text = "Rename";
+            renameToolStripMenuItem.Click += RenameToolStrip_Click;
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            deleteToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(132, 24);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += DeleteToolStrip_Click;
             // 
             // groupBox_NewDisabled
             // 
@@ -169,7 +184,7 @@ namespace P5FlagCompare
             tlp_Checkboxes.ColumnCount = 2;
             tlp_Checkboxes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
             tlp_Checkboxes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
-            tlp_Checkboxes.Controls.Add(chkBox_IDGroups, 0, 0);
+            tlp_Checkboxes.Controls.Add(chkBox_Sections, 0, 0);
             tlp_Checkboxes.Controls.Add(lbl_TimeStamp, 1, 0);
             tlp_Checkboxes.Dock = DockStyle.Fill;
             tlp_Checkboxes.Location = new Point(203, 408);
@@ -179,25 +194,29 @@ namespace P5FlagCompare
             tlp_Checkboxes.Size = new Size(274, 39);
             tlp_Checkboxes.TabIndex = 4;
             // 
-            // chkBox_IDGroups
+            // chkBox_Sections
             // 
-            chkBox_IDGroups.AutoSize = true;
-            chkBox_IDGroups.Checked = true;
-            chkBox_IDGroups.CheckState = CheckState.Checked;
-            chkBox_IDGroups.Location = new Point(3, 3);
-            chkBox_IDGroups.Name = "chkBox_IDGroups";
-            chkBox_IDGroups.Size = new Size(89, 24);
-            chkBox_IDGroups.TabIndex = 4;
-            chkBox_IDGroups.Text = "ID Groups";
+            chkBox_Sections.Anchor = AnchorStyles.Right;
+            chkBox_Sections.AutoSize = true;
+            chkBox_Sections.Checked = true;
+            chkBox_Sections.CheckState = CheckState.Checked;
+            chkBox_Sections.Location = new Point(6, 7);
+            chkBox_Sections.Name = "chkBox_Sections";
+            chkBox_Sections.Size = new Size(86, 24);
+            chkBox_Sections.TabIndex = 4;
+            chkBox_Sections.Text = "Sections";
+            chkBox_Sections.CheckedChanged += Sections_CheckedChanged;
             // 
             // lbl_TimeStamp
             // 
+            lbl_TimeStamp.Anchor = AnchorStyles.Left;
             lbl_TimeStamp.AutoSize = true;
             lbl_TimeStamp.ForeColor = Color.FromArgb(220, 220, 220);
-            lbl_TimeStamp.Location = new Point(98, 0);
+            lbl_TimeStamp.Location = new Point(98, 9);
             lbl_TimeStamp.Name = "lbl_TimeStamp";
             lbl_TimeStamp.Size = new Size(0, 20);
             lbl_TimeStamp.TabIndex = 5;
+            lbl_TimeStamp.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // menuStrip_Main
             // 
@@ -237,32 +256,31 @@ namespace P5FlagCompare
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += Load_Click;
             // 
-            // darkContextMenu_RightClick
+            // groupBox_AllEnabledFlags
             // 
-            darkContextMenu_RightClick.BackColor = Color.FromArgb(60, 63, 65);
-            darkContextMenu_RightClick.ForeColor = Color.FromArgb(220, 220, 220);
-            darkContextMenu_RightClick.ImageScalingSize = new Size(20, 20);
-            darkContextMenu_RightClick.Items.AddRange(new ToolStripItem[] { renameToolStripMenuItem, deleteToolStripMenuItem });
-            darkContextMenu_RightClick.Name = "darkContextMenu_RightClick";
-            darkContextMenu_RightClick.Size = new Size(211, 80);
+            groupBox_AllEnabledFlags.BorderColor = Color.FromArgb(51, 51, 51);
+            groupBox_AllEnabledFlags.Controls.Add(rtb_AllEnabledFlags);
+            groupBox_AllEnabledFlags.Dock = DockStyle.Fill;
+            groupBox_AllEnabledFlags.Location = new Point(483, 48);
+            groupBox_AllEnabledFlags.Name = "groupBox_AllEnabledFlags";
+            tlp_Main.SetRowSpan(groupBox_AllEnabledFlags, 3);
+            groupBox_AllEnabledFlags.Size = new Size(314, 399);
+            groupBox_AllEnabledFlags.TabIndex = 5;
+            groupBox_AllEnabledFlags.TabStop = false;
+            groupBox_AllEnabledFlags.Text = "All Enabled Flags";
             // 
-            // renameToolStripMenuItem
+            // rtb_AllEnabledFlags
             // 
-            renameToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
-            renameToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
-            renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            renameToolStripMenuItem.Size = new Size(210, 24);
-            renameToolStripMenuItem.Text = "Rename";
-            renameToolStripMenuItem.Click += RenameToolStrip_Click;
-            // 
-            // deleteToolStripMenuItem
-            // 
-            deleteToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
-            deleteToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
-            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(210, 24);
-            deleteToolStripMenuItem.Text = "Delete";
-            deleteToolStripMenuItem.Click += DeleteToolStrip_Click;
+            rtb_AllEnabledFlags.BackColor = Color.FromArgb(60, 63, 65);
+            rtb_AllEnabledFlags.BorderStyle = BorderStyle.None;
+            rtb_AllEnabledFlags.Dock = DockStyle.Fill;
+            rtb_AllEnabledFlags.ForeColor = SystemColors.InactiveBorder;
+            rtb_AllEnabledFlags.Location = new Point(3, 23);
+            rtb_AllEnabledFlags.Name = "rtb_AllEnabledFlags";
+            rtb_AllEnabledFlags.ReadOnly = true;
+            rtb_AllEnabledFlags.Size = new Size(308, 373);
+            rtb_AllEnabledFlags.TabIndex = 2;
+            rtb_AllEnabledFlags.Text = "";
             // 
             // MainForm
             // 
@@ -271,17 +289,19 @@ namespace P5FlagCompare
             ClientSize = new Size(800, 450);
             Controls.Add(menuStrip_Main);
             Controls.Add(tlp_Main);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             Text = "P5 Flag Comparer";
             KeyDown += Output_Keydown;
             tlp_Main.ResumeLayout(false);
+            darkContextMenu_RightClick.ResumeLayout(false);
             groupBox_NewDisabled.ResumeLayout(false);
             groupBox_NewEnabled.ResumeLayout(false);
             tlp_Checkboxes.ResumeLayout(false);
             tlp_Checkboxes.PerformLayout();
             menuStrip_Main.ResumeLayout(false);
             menuStrip_Main.PerformLayout();
-            darkContextMenu_RightClick.ResumeLayout(false);
+            groupBox_AllEnabledFlags.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -290,7 +310,6 @@ namespace P5FlagCompare
 
         private TableLayoutPanel tlp_Main;
         private ListBox listBox_Comparisons;
-        private RichTextBox rtb_Output;
         private DarkGroupBox groupBox_NewDisabled;
         private DarkGroupBox groupBox_NewEnabled;
         private DarkMenuStrip menuStrip_Main;
@@ -300,10 +319,12 @@ namespace P5FlagCompare
         private ListBox listBox_NewlyEnabled;
         private ListBox listBox_NewlyDisabled;
         private TableLayoutPanel tlp_Checkboxes;
-        private DarkCheckBox chkBox_IDGroups;
+        private DarkCheckBox chkBox_Sections;
         private DarkLabel lbl_TimeStamp;
         private DarkContextMenu darkContextMenu_RightClick;
         private ToolStripMenuItem renameToolStripMenuItem;
         private ToolStripMenuItem deleteToolStripMenuItem;
+        private DarkGroupBox groupBox_AllEnabledFlags;
+        private RichTextBox rtb_AllEnabledFlags;
     }
 }

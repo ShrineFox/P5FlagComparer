@@ -48,7 +48,7 @@ namespace P5FlagCompare
 
         private void DoDelete()
         {
-            if (WinFormsDialogs.YesNoMsgBox("Remove Comparison?", 
+            if (WinFormsDialogs.YesNoMsgBox("Remove Comparison?",
                 "Would you like to remove the currently selected comparison from the list?", MessageBoxIcon.Question))
                 RemoveComparison();
         }
@@ -147,9 +147,11 @@ namespace P5FlagCompare
             {
                 if (clipboardLines[x].Contains("End Enabled Flag Dump"))
                     break;
-                
+
                 comparison.EnabledFlags.Add(Convert.ToInt32(clipboardLines[x]));
             }
+
+            comparison.EnabledFlags.Sort();
 
             if (settings.comparisons.Count > 0)
             {
@@ -168,6 +170,9 @@ namespace P5FlagCompare
             }
             else
                 comparison.NewEnabledFlags = comparison.EnabledFlags;
+
+            comparison.NewEnabledFlags.Sort();
+            comparison.NewDisabledFlags.Sort();
 
             // Set unique placeholder name
             int i = 1;
@@ -199,6 +204,11 @@ namespace P5FlagCompare
 
         private void SelectedComparison_Changed(object sender, EventArgs e)
         {
+            ReloadSelection();
+        }
+
+        private void ReloadSelection()
+        {
             ClearFormItems();
 
             if (listBox_Comparisons.SelectedItem != null && settings.comparisons.Any(x => x.Name.Equals(listBox_Comparisons.SelectedItem.ToString())))
@@ -225,7 +235,11 @@ namespace P5FlagCompare
                     string name = GetFormattedFlag(enabledFlag);
                     string mappedName = GetMappedName(enabledFlag);
 
-                    rtb_Output.Text += $"BIT_ON({name});{mappedName}\n";
+                    Color highlightColor = rtb_AllEnabledFlags.BackColor;
+                    if (comparison.NewEnabledFlags.Any(x => x.Equals(enabledFlag)))
+                        highlightColor = Color.FromArgb(255, 60, 93, 65);
+                    
+                    AppendText($"BIT_ON({name});{mappedName}", highlightColor, true);
                 }
 
                 // Update timestamp
@@ -233,11 +247,22 @@ namespace P5FlagCompare
             }
         }
 
+        public void AppendText(string text, Color color, bool addNewLine = false)
+        {
+            //rtb_AllEnabledFlags.SuspendLayout();
+            rtb_AllEnabledFlags.SelectionBackColor = color;
+            rtb_AllEnabledFlags.AppendText(addNewLine
+                ? $"{text}{Environment.NewLine}"
+                : text);
+            //rtb_AllEnabledFlags.ScrollToCaret();
+            //rtb_AllEnabledFlags.ResumeLayout();
+        }
+
         private void ClearFormItems()
         {
             listBox_NewlyEnabled.Items.Clear();
             listBox_NewlyDisabled.Items.Clear();
-            rtb_Output.Clear();
+            rtb_AllEnabledFlags.Clear();
             lbl_TimeStamp.Text = "";
         }
 
@@ -245,7 +270,7 @@ namespace P5FlagCompare
         {
             string name = flagId.ToString();
 
-            if (chkBox_IDGroups.Checked)
+            if (chkBox_Sections.Checked)
             {
                 for (int i = 1; i < Flag.sRoyalBits.Length; i++)
                 {
@@ -267,11 +292,6 @@ namespace P5FlagCompare
             if (settings.mappings.Any(x => x.Item1.Equals(flagId)))
                 mappedName = $" // {settings.mappings.First(x => x.Item1.Equals(flagId)).Item2}";
             return mappedName;
-        }
-
-        private void IdGroups_CheckedChanged(object sender, EventArgs e)
-        {
-            UpdateForm();
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -297,6 +317,7 @@ namespace P5FlagCompare
             settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(selection.First()));
 
             UpdateForm();
+            ReloadSelection();
         }
 
         private void RenameToolStrip_Click(object sender, EventArgs e)
@@ -317,6 +338,11 @@ namespace P5FlagCompare
         private void DeleteToolStrip_Click(object sender, EventArgs e)
         {
             DoDelete();
+        }
+
+        private void Sections_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateForm();
         }
     }
 }

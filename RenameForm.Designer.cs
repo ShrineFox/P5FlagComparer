@@ -33,6 +33,7 @@ namespace P5FlagCompare
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RenameForm));
             metroSetLabel_ProjectName = new DarkLabel();
             metroSetTextBox_NewName = new DarkTextBox();
             tableLayoutPanel_Settings = new TableLayoutPanel();
@@ -160,6 +161,7 @@ namespace P5FlagCompare
             CancelButton = metroSetButton_Cancel;
             ClientSize = new Size(509, 224);
             Controls.Add(tableLayoutPanel_Settings);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(2);
             Name = "RenameForm";
             Padding = new Padding(1, 0, 1, 2);
