@@ -9,7 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DarkUI" Version="2.0.2" />
     <PackageReference Include="System.Management" Version="7.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ShrineFox.IO\ShrineFox.IO.csproj" />
   </ItemGroup>
 
 </Project>
