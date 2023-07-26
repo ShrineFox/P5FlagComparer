@@ -45,11 +45,15 @@ namespace P5FlagCompare
             fileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
+            darkContextMenu_RightClick = new DarkContextMenu();
+            renameToolStripMenuItem = new ToolStripMenuItem();
+            deleteToolStripMenuItem = new ToolStripMenuItem();
             tlp_Main.SuspendLayout();
             groupBox_NewDisabled.SuspendLayout();
             groupBox_NewEnabled.SuspendLayout();
             tlp_Checkboxes.SuspendLayout();
             menuStrip_Main.SuspendLayout();
+            darkContextMenu_RightClick.SuspendLayout();
             SuspendLayout();
             // 
             // tlp_Main
@@ -78,6 +82,7 @@ namespace P5FlagCompare
             // 
             listBox_Comparisons.BackColor = Color.FromArgb(60, 63, 65);
             listBox_Comparisons.BorderStyle = BorderStyle.None;
+            listBox_Comparisons.ContextMenuStrip = darkContextMenu_RightClick;
             listBox_Comparisons.Dock = DockStyle.Fill;
             listBox_Comparisons.ForeColor = SystemColors.InactiveBorder;
             listBox_Comparisons.FormattingEnabled = true;
@@ -121,6 +126,7 @@ namespace P5FlagCompare
             // 
             listBox_NewlyDisabled.BackColor = Color.FromArgb(70, 63, 65);
             listBox_NewlyDisabled.BorderStyle = BorderStyle.FixedSingle;
+            listBox_NewlyDisabled.ContextMenuStrip = darkContextMenu_RightClick;
             listBox_NewlyDisabled.Dock = DockStyle.Fill;
             listBox_NewlyDisabled.ForeColor = Color.Silver;
             listBox_NewlyDisabled.FormattingEnabled = true;
@@ -147,6 +153,7 @@ namespace P5FlagCompare
             // 
             listBox_NewlyEnabled.BackColor = Color.FromArgb(60, 73, 65);
             listBox_NewlyEnabled.BorderStyle = BorderStyle.FixedSingle;
+            listBox_NewlyEnabled.ContextMenuStrip = darkContextMenu_RightClick;
             listBox_NewlyEnabled.Dock = DockStyle.Fill;
             listBox_NewlyEnabled.ForeColor = Color.Silver;
             listBox_NewlyEnabled.FormattingEnabled = true;
@@ -230,6 +237,33 @@ namespace P5FlagCompare
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += Load_Click;
             // 
+            // darkContextMenu_RightClick
+            // 
+            darkContextMenu_RightClick.BackColor = Color.FromArgb(60, 63, 65);
+            darkContextMenu_RightClick.ForeColor = Color.FromArgb(220, 220, 220);
+            darkContextMenu_RightClick.ImageScalingSize = new Size(20, 20);
+            darkContextMenu_RightClick.Items.AddRange(new ToolStripItem[] { renameToolStripMenuItem, deleteToolStripMenuItem });
+            darkContextMenu_RightClick.Name = "darkContextMenu_RightClick";
+            darkContextMenu_RightClick.Size = new Size(211, 80);
+            // 
+            // renameToolStripMenuItem
+            // 
+            renameToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            renameToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            renameToolStripMenuItem.Name = "renameToolStripMenuItem";
+            renameToolStripMenuItem.Size = new Size(210, 24);
+            renameToolStripMenuItem.Text = "Rename";
+            renameToolStripMenuItem.Click += RenameToolStrip_Click;
+            // 
+            // deleteToolStripMenuItem
+            // 
+            deleteToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            deleteToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            deleteToolStripMenuItem.Size = new Size(210, 24);
+            deleteToolStripMenuItem.Text = "Delete";
+            deleteToolStripMenuItem.Click += DeleteToolStrip_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -247,6 +281,7 @@ namespace P5FlagCompare
             tlp_Checkboxes.PerformLayout();
             menuStrip_Main.ResumeLayout(false);
             menuStrip_Main.PerformLayout();
+            darkContextMenu_RightClick.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -267,5 +302,8 @@ namespace P5FlagCompare
         private TableLayoutPanel tlp_Checkboxes;
         private DarkCheckBox chkBox_IDGroups;
         private DarkLabel lbl_TimeStamp;
+        private DarkContextMenu darkContextMenu_RightClick;
+        private ToolStripMenuItem renameToolStripMenuItem;
+        private ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

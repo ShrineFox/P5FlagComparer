@@ -2,6 +2,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Management;
 using System.Reflection;
+using System.Windows.Forms;
 using System.Xml.Linq;
 using DarkUI.Forms;
 using Newtonsoft.Json;
@@ -39,9 +40,25 @@ namespace P5FlagCompare
                 DoComparison();
 
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.R)
-            {
                 DoRename(sender);
-            }
+
+            if (e.KeyCode == Keys.Delete)
+                DoDelete();
+        }
+
+        private void DoDelete()
+        {
+            if (WinFormsDialogs.YesNoMsgBox("Remove Comparison?", 
+                "Would you like to remove the currently selected comparison from the list?", MessageBoxIcon.Question))
+                RemoveComparison();
+        }
+
+        private void RemoveComparison()
+        {
+            settings.comparisons.Remove(
+                settings.comparisons.First(x => x.Name.Equals(listBox_Comparisons.SelectedItem.ToString())));
+
+            UpdateForm();
         }
 
         private void DoRename(object sender)
@@ -123,6 +140,7 @@ namespace P5FlagCompare
             {
                 if (clipboardLines[x].Contains("End Enabled Flag Dump"))
                     break;
+                
                 comparison.EnabledFlags.Add(Convert.ToInt32(clipboardLines[x]));
             }
 
@@ -143,6 +161,7 @@ namespace P5FlagCompare
             }
             else
                 comparison.NewEnabledFlags = comparison.EnabledFlags;
+
             // Set unique placeholder name
             int i = 1;
             string name = comparison.Name;
@@ -167,16 +186,13 @@ namespace P5FlagCompare
             {
                 listBox_Comparisons.Items.Add(comparison.Name);
             }
-            rtb_Output.Clear();
+            ClearFormItems();
             listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
         }
 
         private void SelectedComparison_Changed(object sender, EventArgs e)
         {
-            listBox_NewlyEnabled.Items.Clear();
-            listBox_NewlyDisabled.Items.Clear();
-            rtb_Output.Clear();
-            lbl_TimeStamp.Text = "";
+            ClearFormItems();
 
             if (listBox_Comparisons.SelectedItem != null && settings.comparisons.Any(x => x.Name.Equals(listBox_Comparisons.SelectedItem.ToString())))
             {
@@ -197,7 +213,6 @@ namespace P5FlagCompare
                     listBox_NewlyDisabled.Items.Add(name + mappedName);
                 }
 
-                // Show list of all enabled flags with names in comments
                 foreach (var enabledFlag in comparison.EnabledFlags)
                 {
                     string name = GetFormattedFlag(enabledFlag);
@@ -209,6 +224,14 @@ namespace P5FlagCompare
                 // Update timestamp
                 lbl_TimeStamp.Text = comparison.TimeStamp;
             }
+        }
+
+        private void ClearFormItems()
+        {
+            listBox_NewlyEnabled.Items.Clear();
+            listBox_NewlyDisabled.Items.Clear();
+            rtb_Output.Clear();
+            lbl_TimeStamp.Text = "";
         }
 
         private string GetFormattedFlag(int flagId)
@@ -267,6 +290,26 @@ namespace P5FlagCompare
             settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(selection.First()));
 
             UpdateForm();
+        }
+
+        private void RenameToolStrip_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
+            if (menuItem != null)
+            {
+                ContextMenuStrip menu = menuItem.Owner as ContextMenuStrip;
+
+                if (menu != null)
+                {
+                    Control controlSelected = menu.SourceControl;
+                    DoRename(controlSelected);
+                }
+            }
+        }
+
+        private void DeleteToolStrip_Click(object sender, EventArgs e)
+        {
+            DoDelete();
         }
     }
 }
