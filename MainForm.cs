@@ -67,7 +67,14 @@ namespace P5FlagCompare
             if (ctrlName == "listBox_NewlyEnabled" || ctrlName == "listBox_NewlyDisabled")
             {
                 ListBox listBox = (ListBox)sender;
-                int flagId = Convert.ToInt32(listBox.SelectedItem.ToString().Split(' ').Last());
+
+                int flagId = Convert.ToInt32(listBox.SelectedItem.ToString().Split('/').First().Split(' ').Last());
+                // Get Flag ID by section if using formatting
+                if (listBox.SelectedItem.ToString().StartsWith("Flag.Section"))
+                {
+                    int flagSection = Convert.ToInt32(listBox.SelectedItem.ToString().Substring(12, 1));
+                    flagId = flagId - Flag.sRoyalBits[flagSection];
+                }
                 RenameFlag(flagId);
             }
             else
