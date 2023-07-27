@@ -44,19 +44,20 @@ namespace P5FlagCompare
             tlp_Checkboxes = new TableLayoutPanel();
             chkBox_Sections = new DarkCheckBox();
             lbl_TimeStamp = new DarkLabel();
+            groupBox_AllEnabledFlags = new DarkGroupBox();
+            rtb_AllEnabledFlags = new RichTextBox();
             menuStrip_Main = new DarkMenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
-            groupBox_AllEnabledFlags = new DarkGroupBox();
-            rtb_AllEnabledFlags = new RichTextBox();
+            pasteFlagsToolStripMenuItem = new ToolStripMenuItem();
             tlp_Main.SuspendLayout();
             darkContextMenu_RightClick.SuspendLayout();
             groupBox_NewDisabled.SuspendLayout();
             groupBox_NewEnabled.SuspendLayout();
             tlp_Checkboxes.SuspendLayout();
-            menuStrip_Main.SuspendLayout();
             groupBox_AllEnabledFlags.SuspendLayout();
+            menuStrip_Main.SuspendLayout();
             SuspendLayout();
             // 
             // tlp_Main
@@ -218,44 +219,6 @@ namespace P5FlagCompare
             lbl_TimeStamp.TabIndex = 5;
             lbl_TimeStamp.TextAlign = ContentAlignment.MiddleLeft;
             // 
-            // menuStrip_Main
-            // 
-            menuStrip_Main.BackColor = Color.FromArgb(60, 63, 65);
-            menuStrip_Main.ForeColor = Color.FromArgb(220, 220, 220);
-            menuStrip_Main.ImageScalingSize = new Size(20, 20);
-            menuStrip_Main.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
-            menuStrip_Main.Location = new Point(0, 0);
-            menuStrip_Main.Name = "menuStrip_Main";
-            menuStrip_Main.Padding = new Padding(3, 2, 0, 2);
-            menuStrip_Main.Size = new Size(800, 28);
-            menuStrip_Main.TabIndex = 2;
-            menuStrip_Main.KeyDown += Output_Keydown;
-            // 
-            // fileToolStripMenuItem
-            // 
-            fileToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem });
-            fileToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
-            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            fileToolStripMenuItem.Size = new Size(46, 24);
-            fileToolStripMenuItem.Text = "File";
-            // 
-            // saveToolStripMenuItem
-            // 
-            saveToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
-            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(125, 26);
-            saveToolStripMenuItem.Text = "Save";
-            saveToolStripMenuItem.Click += Save_Click;
-            // 
-            // loadToolStripMenuItem
-            // 
-            loadToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
-            loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(125, 26);
-            loadToolStripMenuItem.Text = "Load";
-            loadToolStripMenuItem.Click += Load_Click;
-            // 
             // groupBox_AllEnabledFlags
             // 
             groupBox_AllEnabledFlags.BorderColor = Color.FromArgb(51, 51, 51);
@@ -282,6 +245,53 @@ namespace P5FlagCompare
             rtb_AllEnabledFlags.TabIndex = 2;
             rtb_AllEnabledFlags.Text = "";
             // 
+            // menuStrip_Main
+            // 
+            menuStrip_Main.BackColor = Color.FromArgb(60, 63, 65);
+            menuStrip_Main.ForeColor = Color.FromArgb(220, 220, 220);
+            menuStrip_Main.ImageScalingSize = new Size(20, 20);
+            menuStrip_Main.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, pasteFlagsToolStripMenuItem });
+            menuStrip_Main.Location = new Point(0, 0);
+            menuStrip_Main.Name = "menuStrip_Main";
+            menuStrip_Main.Padding = new Padding(3, 2, 0, 2);
+            menuStrip_Main.Size = new Size(800, 28);
+            menuStrip_Main.TabIndex = 2;
+            menuStrip_Main.KeyDown += Output_Keydown;
+            // 
+            // fileToolStripMenuItem
+            // 
+            fileToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem });
+            fileToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            fileToolStripMenuItem.Size = new Size(46, 24);
+            fileToolStripMenuItem.Text = "File";
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(224, 26);
+            saveToolStripMenuItem.Text = "Save";
+            saveToolStripMenuItem.Click += Save_Click;
+            // 
+            // loadToolStripMenuItem
+            // 
+            loadToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            loadToolStripMenuItem.Size = new Size(224, 26);
+            loadToolStripMenuItem.Text = "Load";
+            loadToolStripMenuItem.Click += Load_Click;
+            // 
+            // pasteFlagsToolStripMenuItem
+            // 
+            pasteFlagsToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            pasteFlagsToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            pasteFlagsToolStripMenuItem.Name = "pasteFlagsToolStripMenuItem";
+            pasteFlagsToolStripMenuItem.Size = new Size(95, 24);
+            pasteFlagsToolStripMenuItem.Text = "Paste Flags";
+            pasteFlagsToolStripMenuItem.Click += PasteFlags_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -299,9 +309,9 @@ namespace P5FlagCompare
             groupBox_NewEnabled.ResumeLayout(false);
             tlp_Checkboxes.ResumeLayout(false);
             tlp_Checkboxes.PerformLayout();
+            groupBox_AllEnabledFlags.ResumeLayout(false);
             menuStrip_Main.ResumeLayout(false);
             menuStrip_Main.PerformLayout();
-            groupBox_AllEnabledFlags.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -326,5 +336,6 @@ namespace P5FlagCompare
         private ToolStripMenuItem deleteToolStripMenuItem;
         private DarkGroupBox groupBox_AllEnabledFlags;
         private RichTextBox rtb_AllEnabledFlags;
+        private ToolStripMenuItem pasteFlagsToolStripMenuItem;
     }
 }

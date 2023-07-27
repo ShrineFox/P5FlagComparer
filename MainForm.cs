@@ -4,6 +4,7 @@ using System.Management;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using DarkUI.Controls;
 using DarkUI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
@@ -32,6 +33,7 @@ namespace P5FlagCompare
         public MainForm()
         {
             InitializeComponent();
+            SetMenuStripIcons();
         }
 
         private void Output_Keydown(object sender, KeyEventArgs e)
@@ -48,6 +50,9 @@ namespace P5FlagCompare
 
         private void DoDelete()
         {
+            if (listBox_Comparisons.SelectedItem == null)
+                return;
+
             if (WinFormsDialogs.YesNoMsgBox("Remove Comparison?",
                 "Would you like to remove the currently selected comparison from the list?", MessageBoxIcon.Question))
                 RemoveComparison();
@@ -73,7 +78,7 @@ namespace P5FlagCompare
                 if (listBox.SelectedItem.ToString().StartsWith("Flag.Section"))
                 {
                     int flagSection = Convert.ToInt32(listBox.SelectedItem.ToString().Substring(12, 1));
-                    flagId = Flag.sRoyalBits[flagSection + 1] - flagId;
+                    flagId = Flag.sRoyalBits[flagSection] + flagId;
                 }
                 RenameFlag(flagId);
             }
@@ -83,6 +88,9 @@ namespace P5FlagCompare
 
         private void RenameComparison()
         {
+            if (listBox_Comparisons.SelectedItem == null)
+                return;
+
             RenameForm renameForm = new RenameForm(listBox_Comparisons.SelectedItem.ToString());
             var result = renameForm.ShowDialog();
             if (result == DialogResult.OK)
@@ -238,7 +246,7 @@ namespace P5FlagCompare
                     Color highlightColor = rtb_AllEnabledFlags.BackColor;
                     if (comparison.NewEnabledFlags.Any(x => x.Equals(enabledFlag)))
                         highlightColor = Color.FromArgb(255, 60, 93, 65);
-                    
+
                     AppendText($"BIT_ON({name});{mappedName}", highlightColor, true);
                 }
 
@@ -343,6 +351,65 @@ namespace P5FlagCompare
         private void Sections_CheckedChanged(object sender, EventArgs e)
         {
             UpdateForm();
+        }
+
+        private void PasteFlags_Click(object sender, EventArgs e)
+        {
+            DoComparison();
+        }
+
+        private void SetMenuStripIcons()
+        {
+            List<Tuple<string, string>> menuStripIcons = new List<Tuple<string, string>>() {
+                new Tuple<string, string>("fileToolStripMenuItem", "disk"),
+                new Tuple<string, string>("loadToolStripMenuItem", "folder_page"),
+                new Tuple<string, string>("saveToolStripMenuItem", "disk_multiple"),
+                new Tuple<string, string>("pasteFlagsToolStripMenuItem", "paste_plain"),
+                new Tuple<string, string>("deleteToolStripMenuItem", "delete"),
+                new Tuple<string, string>("renameToolStripMenuItem", "textfield_rename"),
+            };
+
+            // Context Menu Strips
+            foreach (DarkContextMenu menuStrip in new DarkContextMenu[] { darkContextMenu_RightClick })
+                ApplyIconsFromList(menuStrip.Items, menuStripIcons);
+
+            // Menu Strip Items
+            foreach (DarkMenuStrip menuStrip in this.FlattenChildren<DarkMenuStrip>())
+                ApplyIconsFromList(menuStrip.Items, menuStripIcons);
+        }
+
+        private void ApplyIconsFromList(ToolStripItemCollection items, List<Tuple<string, string>> menuStripIcons)
+        {
+            foreach (ToolStripMenuItem tsmi in items)
+            {
+                // Apply context menu icon
+                if (menuStripIcons.Any(x => x.Item1 == tsmi.Name))
+                    ApplyIconFromFile(tsmi, menuStripIcons);
+                // Apply drop down menu icon
+                foreach (ToolStripMenuItem tsmi2 in tsmi.DropDownItems)
+                    if (menuStripIcons.Any(x => x.Item1 == tsmi2.Name))
+                        ApplyIconFromFile(tsmi2, menuStripIcons);
+            }
+        }
+
+        private void ApplyIconFromFile(ToolStripMenuItem tsmi, List<Tuple<string, string>> menuStripIcons)
+        {
+            tsmi.Image = Image.FromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                        $"Icons\\{menuStripIcons.Single(x => x.Item1 == tsmi.Name).Item2}.png"));
+        }
+    }
+
+    public static class ControlExtensions
+    {
+        public static IEnumerable<Control> FlattenChildren<T>(this Control control)
+        {
+            return control.FlattenChildren().OfType<T>().Cast<Control>();
+        }
+
+        public static IEnumerable<Control> FlattenChildren(this Control control)
+        {
+            var children = control.Controls.Cast<Control>();
+            return children.SelectMany(c => FlattenChildren(c)).Concat(children);
         }
     }
 }
