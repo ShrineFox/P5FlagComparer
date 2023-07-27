@@ -72,15 +72,39 @@ namespace P5FlagCompare
             if (ctrlName == "listBox_NewlyEnabled" || ctrlName == "listBox_NewlyDisabled")
             {
                 ListBox listBox = (ListBox)sender;
+
                 string selectedFlag = listBox.SelectedItem.ToString().Split('/').First().Trim().Split(' ').Last();
                 int flagId = Convert.ToInt32(selectedFlag);
-                // Get Flag ID by section if using formatting
-                if (listBox.SelectedItem.ToString().StartsWith("Flag.Section"))
+
+                string newName = RenameFlag(flagId);
+                
+                if (listBox.SelectedItems.Count > 1)
                 {
-                    int flagSection = Convert.ToInt32(listBox.SelectedItem.ToString().Substring(12, 1));
-                    flagId = Flag.sRoyalBits[flagSection] + flagId;
+                    foreach (var item in listBox.SelectedItems)
+                    {
+                        selectedFlag = item.ToString().Split('/').First().Trim().Split(' ').Last();
+                        flagId = Convert.ToInt32(selectedFlag);
+
+                        // Get Flag ID by section if using formatting
+                        if (listBox.SelectedItem.ToString().StartsWith("Flag.Section"))
+                        {
+                            int flagSection = Convert.ToInt32(item.ToString().Substring(12, 1));
+                            flagId = Flag.sRoyalBits[flagSection] + flagId;
+                        }
+
+                        // Set unique placeholder name
+                        int i = 1;
+                        string name = newName;
+                        while (settings.mappings.Any(x => x.Item2.Equals(name)))
+                        {
+                            i++;
+                            name = newName + i;
+                        }
+                        SetNewName(name, flagId);
+                    }
                 }
-                RenameFlag(flagId);
+
+                UpdateForm();
             }
             else
                 RenameComparison();
@@ -101,32 +125,36 @@ namespace P5FlagCompare
             }
         }
 
-        private void RenameFlag(int flagId)
+        private string RenameFlag(int flagId)
         {
             // Get old mapped name if one exists
             string oldName = "";
-            bool mappingFound = false;
             if (settings.mappings.Any(x => x.Item1.Equals(flagId)))
-            {
-                mappingFound = true;
                 oldName = settings.mappings.First(x => x.Item1.Equals(flagId)).Item2;
-            }
 
             RenameForm renameForm = new RenameForm(oldName);
             var result = renameForm.ShowDialog();
             if (result == DialogResult.OK)
             {
                 string newName = renameForm.RenameText;
-                // Remove existing mapping if one exists
-                if (mappingFound)
-                    settings.mappings.Remove(settings.mappings.First(x => x.Item1.Equals(flagId)));
-                // Add new mapping
-                settings.mappings.Add(new Tuple<int, string>(flagId, newName));
-                // Re-order mappings in numerical order by flag ID
-                settings.mappings = settings.mappings.OrderBy(x => x.Item1).ToList();
 
-                UpdateForm();
+                SetNewName(newName, flagId);
+
+                return newName;
             }
+
+            return oldName;
+        }
+
+        private void SetNewName(string newName, int flagId)
+        {
+            // Remove existing mapping if one exists
+            if (settings.mappings.Any(x => x.Item1.Equals(flagId)))
+                settings.mappings.Remove(settings.mappings.First(x => x.Item1.Equals(flagId)));
+            // Add new mapping
+            settings.mappings.Add(new Tuple<int, string>(flagId, newName));
+            // Re-order mappings in numerical order by flag ID
+            settings.mappings = settings.mappings.OrderBy(x => x.Item1).ToList();
         }
 
         private void DoComparison()

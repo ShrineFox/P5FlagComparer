@@ -149,6 +149,7 @@ namespace P5FlagCompare
             listBox_NewlyDisabled.ItemHeight = 20;
             listBox_NewlyDisabled.Location = new Point(3, 23);
             listBox_NewlyDisabled.Name = "listBox_NewlyDisabled";
+            listBox_NewlyDisabled.SelectionMode = SelectionMode.MultiExtended;
             listBox_NewlyDisabled.Size = new Size(268, 148);
             listBox_NewlyDisabled.TabIndex = 1;
             listBox_NewlyDisabled.KeyDown += Output_Keydown;
@@ -176,6 +177,7 @@ namespace P5FlagCompare
             listBox_NewlyEnabled.ItemHeight = 20;
             listBox_NewlyEnabled.Location = new Point(3, 23);
             listBox_NewlyEnabled.Name = "listBox_NewlyEnabled";
+            listBox_NewlyEnabled.SelectionMode = SelectionMode.MultiExtended;
             listBox_NewlyEnabled.Size = new Size(268, 148);
             listBox_NewlyEnabled.TabIndex = 0;
             listBox_NewlyEnabled.KeyDown += Output_Keydown;
@@ -271,7 +273,7 @@ namespace P5FlagCompare
             // 
             saveToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(224, 26);
+            saveToolStripMenuItem.Size = new Size(125, 26);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += Save_Click;
             // 
@@ -279,7 +281,7 @@ namespace P5FlagCompare
             // 
             loadToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(224, 26);
+            loadToolStripMenuItem.Size = new Size(125, 26);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += Load_Click;
             // 
