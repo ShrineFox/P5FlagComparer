@@ -87,11 +87,11 @@ namespace P5FlagCompare
                     if (clipboardLines[x + 1].Contains("Start Count Value Dump"))
                     {
                         int countId = 0;
-                        for (int y = x + 1; y < clipboardLines.Length; x++)
+                        for (int y = x + 2; y < clipboardLines.Length; y++)
                         {
-                            if (clipboardLines[x].Contains("End Count Value Dump"))
+                            if (clipboardLines[y].Contains("End Count Value Dump"))
                                 break;
-                            int countValue = Convert.ToInt32(clipboardLines[x]);
+                            int countValue = Convert.ToInt32(clipboardLines[y]);
                             if (countValue != 0)
                                 comparison.SetCounts.Add(new Tuple<int, int>(countId, countValue));
                             countId++;
@@ -131,7 +131,10 @@ namespace P5FlagCompare
                 }
             }
             else
+            {
                 comparison.NewEnabledFlags = comparison.EnabledFlags;
+                comparison.NewChangedCounts = comparison.SetCounts;
+            }
 
             // Set unique placeholder name
             int i = 1;
