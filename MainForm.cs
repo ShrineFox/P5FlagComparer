@@ -1,19 +1,20 @@
-using System.Configuration;
-using System.Diagnostics;
-using System.Management;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using DarkUI.Controls;
 using DarkUI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
-using static System.Collections.Specialized.BitVector32;
 
 namespace P5FlagCompare
 {
     public partial class MainForm : DarkForm
     {
+        private static int selectedComparison = -1;
+        private static int selectedEnabledFlag = -1;
+        private static int selectedDisabledFlag = -1;
+        private static int selectedChangedCount = -1;
+        private static int selectedUnsetCount = -1;
+
         Settings settings = new Settings();
         public class Settings
         {
@@ -72,6 +73,7 @@ namespace P5FlagCompare
                         break;
                     }
                 }
+                RestorePreviousSelections();
             }
         }
 
@@ -156,22 +158,31 @@ namespace P5FlagCompare
         private void Sections_CheckedChanged(object sender, EventArgs e)
         {
             UpdateForm();
+            RestorePreviousSelections();
         }
 
         private void UpdateForm()
         {
+            if (listBox_Comparisons.SelectedItem != null)
+                selectedComparison = listBox_Comparisons.SelectedIndex;
+            else
+                selectedComparison = -1;
+
             listBox_Comparisons.Items.Clear();
             foreach (var comparison in settings.comparisons)
             {
                 listBox_Comparisons.Items.Add(comparison.Name);
             }
+            listBox_Comparisons.Enabled = false;
             ClearFormItems();
-            listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
+            ReloadSelection();
+            listBox_Comparisons.Enabled = true;
         }
 
         private void SelectedComparison_Changed(object sender, EventArgs e)
         {
-            ReloadSelection();
+            if (listBox_Comparisons.Enabled)
+                ReloadSelection();
         }
 
         private void ReloadSelection()
@@ -237,6 +248,23 @@ namespace P5FlagCompare
             }
         }
 
+        public void RestorePreviousSelections()
+        {
+            // Restore previous selection
+            if (selectedComparison != -1 && listBox_Comparisons.Items.Count - 1 >= selectedComparison)
+                listBox_Comparisons.SelectedIndex = selectedComparison;
+            if (selectedEnabledFlag != -1 && listBox_NewlyEnabled.Items.Count - 1 >= selectedEnabledFlag)
+                listBox_NewlyEnabled.SelectedIndex = selectedEnabledFlag;
+            if (selectedDisabledFlag != -1 && listBox_NewlyDisabled.Items.Count - 1 >= selectedDisabledFlag)
+                listBox_NewlyDisabled.SelectedIndex = selectedDisabledFlag;
+            if (selectedChangedCount != -1 && listBox_NewCount.Items.Count - 1 >= selectedChangedCount)
+                listBox_NewCount.SelectedIndex = selectedChangedCount;
+            if (selectedUnsetCount != -1 && listBox_UnsetCount.Items.Count - 1 >= selectedUnsetCount)
+                listBox_UnsetCount.SelectedIndex = selectedUnsetCount;
+
+            // Scroll to previous selection
+        }
+
         public void AppendText(string text, Color color, bool addNewLine = false)
         {
             //rtb_AllEnabledFlags.SuspendLayout();
@@ -250,10 +278,30 @@ namespace P5FlagCompare
 
         private void ClearFormItems()
         {
+            if (listBox_NewlyEnabled.SelectedItem != null)
+                selectedEnabledFlag = listBox_NewlyEnabled.SelectedIndex;
+            else
+                selectedEnabledFlag = -1;
             listBox_NewlyEnabled.Items.Clear();
+
+            if (listBox_NewlyDisabled.SelectedItem != null)
+                selectedDisabledFlag = listBox_NewlyDisabled.SelectedIndex;
+            else
+                selectedDisabledFlag = -1;
             listBox_NewlyDisabled.Items.Clear();
+
+            if (listBox_NewCount.SelectedItem != null)
+                selectedChangedCount = listBox_NewCount.SelectedIndex;
+            else
+                selectedChangedCount = -1;
             listBox_NewCount.Items.Clear();
+
+            if (listBox_UnsetCount.SelectedItem != null)
+                selectedUnsetCount = listBox_UnsetCount.SelectedIndex;
+            else
+                selectedUnsetCount = -1;
             listBox_UnsetCount.Items.Clear();
+
             rtb_AllEnabledFlags.Clear();
             lbl_TimeStamp.Text = "";
         }
@@ -339,13 +387,15 @@ namespace P5FlagCompare
         {
             string ctrlName = ((Control)sender).Name;
             if (ctrlName == "listBox_NewlyEnabled" || ctrlName == "listBox_NewlyDisabled"
-                || ctrlName == "listBox_NewCount" || ctrlName == "listBox_UnsetCount" )
+                || ctrlName == "listBox_NewCount" || ctrlName == "listBox_UnsetCount")
             {
                 bool isCount = false;
                 if (ctrlName.Contains("Count"))
                     isCount = true;
 
                 ListBox listBox = (ListBox)sender;
+                if (listBox.SelectedItem == null)
+                    return;
 
                 string selectedName = "";
                 if (!isCount)
@@ -363,10 +413,16 @@ namespace P5FlagCompare
                         if (!isCount)
                         {
                             // Get Flag ID by section if using formatting
-                            if (listBox.SelectedItem.ToString().StartsWith("Flag.Section"))
+                            if (item.ToString().StartsWith("Flag.Section"))
                             {
                                 int flagSection = Convert.ToInt32(item.ToString().Substring(12, 1));
-                                id = Flag.sRoyalBits[flagSection] + id;
+                                selectedName = item.ToString().Split('/').First().Trim().Split(' ').Last();
+                                id = Flag.sRoyalBits[flagSection] + Convert.ToInt32(selectedName);
+                            }
+                            else
+                            {
+                                selectedName = item.ToString().Split('/').First().Trim().Split(' ').Last();
+                                id = Convert.ToInt32(selectedName);
                             }
 
                             // Set unique placeholder name
@@ -375,7 +431,7 @@ namespace P5FlagCompare
                             while (settings.flagMappings.Any(x => x.Item2.Equals(name)))
                             {
                                 i++;
-                                name = newName + i;
+                                name = newName + " " + i;
                             }
 
                             SetNewFlagName(name, id);
@@ -391,7 +447,7 @@ namespace P5FlagCompare
                             while (settings.countMappings.Any(x => x.Item2.Equals(name)))
                             {
                                 i++;
-                                name = newName + i;
+                                name = newName + " " + i;
                             }
 
                             SetNewCountName(name, id);
@@ -403,6 +459,7 @@ namespace P5FlagCompare
             }
             else
                 RenameComparison();
+            RestorePreviousSelections();
         }
 
         private void RenameComparison()
@@ -415,7 +472,17 @@ namespace P5FlagCompare
             if (result == DialogResult.OK)
             {
                 string newName = renameForm.RenameText;
-                settings.comparisons.First(x => x.Name.Equals(listBox_Comparisons.SelectedItem.ToString())).Name = newName;
+                if (newName == "")
+                    newName = "Untitled";
+                // Set unique placeholder name
+                int i = 1;
+                string name = newName;
+                while (settings.comparisons.Any(x => x.Name.Equals(name)))
+                {
+                    i++;
+                    name = newName + " " + i;
+                }
+                settings.comparisons.First(x => x.Name.Equals(listBox_Comparisons.SelectedItem.ToString())).Name = name;
                 UpdateForm();
             }
         }
@@ -452,15 +519,18 @@ namespace P5FlagCompare
             return oldName;
         }
 
-        private void SetNewFlagName(string newName, int flagId)
+        private void SetNewFlagName(string name, int id)
         {
             // Remove existing mapping if one exists
-            if (settings.flagMappings.Any(x => x.Item1.Equals(flagId)))
-                settings.flagMappings.Remove(settings.flagMappings.First(x => x.Item1.Equals(flagId)));
-            // Add new mapping
-            settings.flagMappings.Add(new Tuple<int, string>(flagId, newName));
-            // Re-order flagMappings in numerical order by flag ID
-            settings.flagMappings = settings.flagMappings.OrderBy(x => x.Item1).ToList();
+            if (settings.flagMappings.Any(x => x.Item1.Equals(id)))
+                settings.flagMappings.Remove(settings.flagMappings.First(x => x.Item1.Equals(id)));
+            if (name != "")
+            {
+                // Add new mapping
+                settings.flagMappings.Add(new Tuple<int, string>(id, name));
+                // Re-order flagMappings in numerical order by flag ID
+                settings.flagMappings = settings.flagMappings.OrderBy(x => x.Item1).ToList();
+            }
         }
 
         private void SetNewCountName(string name, int id)
@@ -468,10 +538,14 @@ namespace P5FlagCompare
             // Remove existing mapping if one exists
             if (settings.countMappings.Any(x => x.Item1.Equals(id)))
                 settings.countMappings.Remove(settings.countMappings.First(x => x.Item1.Equals(id)));
-            // Add new mapping
-            settings.countMappings.Add(new Tuple<int, string>(id, name));
-            // Re-order countMappings in numerical order by count ID
-            settings.countMappings = settings.countMappings.OrderBy(x => x.Item1).ToList();
+            if (name != "")
+            {
+                // Add new mapping
+                settings.countMappings.Add(new Tuple<int, string>(id, name));
+                // Re-order countMappings in numerical order by count ID
+                settings.countMappings = settings.countMappings.OrderBy(x => x.Item1).ToList();
+            }
+
         }
 
         private void DeleteToolStrip_Click(object sender, EventArgs e)
@@ -495,6 +569,7 @@ namespace P5FlagCompare
                 settings.comparisons.First(x => x.Name.Equals(listBox_Comparisons.SelectedItem.ToString())));
 
             UpdateForm();
+            RestorePreviousSelections();
         }
 
         private void SetMenuStripIcons()

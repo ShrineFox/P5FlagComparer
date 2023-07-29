@@ -43,18 +43,18 @@ namespace P5FlagCompare
             groupBox_AllEnabledFlags = new DarkGroupBox();
             rtb_AllEnabledFlags = new RichTextBox();
             metroSetTabControl_FlagType = new MetroSet_UI.Controls.MetroSetTabControl();
-            tabPage_Count = new TabPage();
-            tlp_Count = new TableLayoutPanel();
-            groupBox_UnsetCount = new DarkGroupBox();
-            listBox_UnsetCount = new ListBox();
-            groupBox_NewCount = new DarkGroupBox();
-            listBox_NewCount = new ListBox();
             tabPage_BitFlags = new TabPage();
             tlp_BitFlags = new TableLayoutPanel();
             groupBox_NewDisabled = new DarkGroupBox();
             listBox_NewlyDisabled = new ListBox();
             groupBox_NewEnabled = new DarkGroupBox();
             listBox_NewlyEnabled = new ListBox();
+            tabPage_Count = new TabPage();
+            tlp_Count = new TableLayoutPanel();
+            groupBox_UnsetCount = new DarkGroupBox();
+            listBox_UnsetCount = new ListBox();
+            groupBox_NewCount = new DarkGroupBox();
+            listBox_NewCount = new ListBox();
             menuStrip_Main = new DarkMenuStrip();
             fileToolStripMenuItem = new ToolStripMenuItem();
             saveToolStripMenuItem = new ToolStripMenuItem();
@@ -65,14 +65,14 @@ namespace P5FlagCompare
             tlp_Checkboxes.SuspendLayout();
             groupBox_AllEnabledFlags.SuspendLayout();
             metroSetTabControl_FlagType.SuspendLayout();
-            tabPage_Count.SuspendLayout();
-            tlp_Count.SuspendLayout();
-            groupBox_UnsetCount.SuspendLayout();
-            groupBox_NewCount.SuspendLayout();
             tabPage_BitFlags.SuspendLayout();
             tlp_BitFlags.SuspendLayout();
             groupBox_NewDisabled.SuspendLayout();
             groupBox_NewEnabled.SuspendLayout();
+            tabPage_Count.SuspendLayout();
+            tlp_Count.SuspendLayout();
+            groupBox_UnsetCount.SuspendLayout();
+            groupBox_NewCount.SuspendLayout();
             menuStrip_Main.SuspendLayout();
             SuspendLayout();
             // 
@@ -234,6 +234,94 @@ namespace P5FlagCompare
             metroSetTabControl_FlagType.UnselectedTextColor = Color.Gray;
             metroSetTabControl_FlagType.UseAnimation = false;
             // 
+            // tabPage_BitFlags
+            // 
+            tabPage_BitFlags.BackColor = Color.FromArgb(60, 63, 65);
+            tabPage_BitFlags.Controls.Add(tlp_BitFlags);
+            tabPage_BitFlags.ForeColor = Color.Silver;
+            tabPage_BitFlags.Location = new Point(4, 42);
+            tabPage_BitFlags.Name = "tabPage_BitFlags";
+            tabPage_BitFlags.Size = new Size(272, 314);
+            tabPage_BitFlags.TabIndex = 0;
+            tabPage_BitFlags.Text = "Bit Flags";
+            // 
+            // tlp_BitFlags
+            // 
+            tlp_BitFlags.ColumnCount = 1;
+            tlp_BitFlags.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tlp_BitFlags.Controls.Add(groupBox_NewDisabled, 0, 1);
+            tlp_BitFlags.Controls.Add(groupBox_NewEnabled, 0, 0);
+            tlp_BitFlags.Dock = DockStyle.Fill;
+            tlp_BitFlags.Location = new Point(0, 0);
+            tlp_BitFlags.Name = "tlp_BitFlags";
+            tlp_BitFlags.RowCount = 2;
+            tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tlp_BitFlags.Size = new Size(272, 314);
+            tlp_BitFlags.TabIndex = 0;
+            // 
+            // groupBox_NewDisabled
+            // 
+            groupBox_NewDisabled.BorderColor = Color.FromArgb(51, 51, 51);
+            groupBox_NewDisabled.Controls.Add(listBox_NewlyDisabled);
+            groupBox_NewDisabled.Dock = DockStyle.Fill;
+            groupBox_NewDisabled.Location = new Point(0, 157);
+            groupBox_NewDisabled.Margin = new Padding(0);
+            groupBox_NewDisabled.Name = "groupBox_NewDisabled";
+            groupBox_NewDisabled.Padding = new Padding(0);
+            groupBox_NewDisabled.Size = new Size(272, 157);
+            groupBox_NewDisabled.TabIndex = 5;
+            groupBox_NewDisabled.TabStop = false;
+            groupBox_NewDisabled.Text = "Newly Disabled Flags";
+            // 
+            // listBox_NewlyDisabled
+            // 
+            listBox_NewlyDisabled.BackColor = Color.FromArgb(70, 63, 65);
+            listBox_NewlyDisabled.BorderStyle = BorderStyle.FixedSingle;
+            listBox_NewlyDisabled.ContextMenuStrip = darkContextMenu_RightClick;
+            listBox_NewlyDisabled.Dock = DockStyle.Fill;
+            listBox_NewlyDisabled.ForeColor = Color.Silver;
+            listBox_NewlyDisabled.FormattingEnabled = true;
+            listBox_NewlyDisabled.ItemHeight = 20;
+            listBox_NewlyDisabled.Location = new Point(0, 20);
+            listBox_NewlyDisabled.Name = "listBox_NewlyDisabled";
+            listBox_NewlyDisabled.SelectionMode = SelectionMode.MultiExtended;
+            listBox_NewlyDisabled.Size = new Size(272, 137);
+            listBox_NewlyDisabled.TabIndex = 1;
+            listBox_NewlyDisabled.KeyDown += Output_Keydown;
+            // 
+            // groupBox_NewEnabled
+            // 
+            groupBox_NewEnabled.BackColor = Color.FromArgb(51, 51, 51);
+            groupBox_NewEnabled.BorderColor = Color.FromArgb(51, 51, 51);
+            groupBox_NewEnabled.Controls.Add(listBox_NewlyEnabled);
+            groupBox_NewEnabled.Dock = DockStyle.Fill;
+            groupBox_NewEnabled.Location = new Point(0, 0);
+            groupBox_NewEnabled.Margin = new Padding(0);
+            groupBox_NewEnabled.Name = "groupBox_NewEnabled";
+            groupBox_NewEnabled.Padding = new Padding(0);
+            groupBox_NewEnabled.Size = new Size(272, 157);
+            groupBox_NewEnabled.TabIndex = 4;
+            groupBox_NewEnabled.TabStop = false;
+            groupBox_NewEnabled.Text = "Newly Enabled Flags";
+            // 
+            // listBox_NewlyEnabled
+            // 
+            listBox_NewlyEnabled.BackColor = Color.FromArgb(60, 73, 65);
+            listBox_NewlyEnabled.BorderStyle = BorderStyle.FixedSingle;
+            listBox_NewlyEnabled.ContextMenuStrip = darkContextMenu_RightClick;
+            listBox_NewlyEnabled.Dock = DockStyle.Fill;
+            listBox_NewlyEnabled.ForeColor = Color.Silver;
+            listBox_NewlyEnabled.FormattingEnabled = true;
+            listBox_NewlyEnabled.ItemHeight = 20;
+            listBox_NewlyEnabled.Location = new Point(0, 20);
+            listBox_NewlyEnabled.Name = "listBox_NewlyEnabled";
+            listBox_NewlyEnabled.SelectionMode = SelectionMode.MultiExtended;
+            listBox_NewlyEnabled.Size = new Size(272, 137);
+            listBox_NewlyEnabled.TabIndex = 0;
+            listBox_NewlyEnabled.KeyDown += Output_Keydown;
+            // 
             // tabPage_Count
             // 
             tabPage_Count.BackColor = Color.FromArgb(60, 63, 65);
@@ -291,6 +379,7 @@ namespace P5FlagCompare
             listBox_UnsetCount.SelectionMode = SelectionMode.MultiExtended;
             listBox_UnsetCount.Size = new Size(272, 137);
             listBox_UnsetCount.TabIndex = 1;
+            listBox_UnsetCount.KeyDown += Output_Keydown;
             // 
             // groupBox_NewCount
             // 
@@ -321,92 +410,7 @@ namespace P5FlagCompare
             listBox_NewCount.SelectionMode = SelectionMode.MultiExtended;
             listBox_NewCount.Size = new Size(272, 137);
             listBox_NewCount.TabIndex = 0;
-            // 
-            // tabPage_BitFlags
-            // 
-            tabPage_BitFlags.BackColor = Color.FromArgb(60, 63, 65);
-            tabPage_BitFlags.Controls.Add(tlp_BitFlags);
-            tabPage_BitFlags.ForeColor = Color.Silver;
-            tabPage_BitFlags.Location = new Point(4, 42);
-            tabPage_BitFlags.Name = "tabPage_BitFlags";
-            tabPage_BitFlags.Size = new Size(272, 314);
-            tabPage_BitFlags.TabIndex = 0;
-            tabPage_BitFlags.Text = "Bit Flags";
-            // 
-            // tlp_BitFlags
-            // 
-            tlp_BitFlags.ColumnCount = 1;
-            tlp_BitFlags.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tlp_BitFlags.Controls.Add(groupBox_NewDisabled, 0, 1);
-            tlp_BitFlags.Controls.Add(groupBox_NewEnabled, 0, 0);
-            tlp_BitFlags.Dock = DockStyle.Fill;
-            tlp_BitFlags.Location = new Point(0, 0);
-            tlp_BitFlags.Name = "tlp_BitFlags";
-            tlp_BitFlags.RowCount = 2;
-            tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlp_BitFlags.Size = new Size(272, 314);
-            tlp_BitFlags.TabIndex = 0;
-            // 
-            // groupBox_NewDisabled
-            // 
-            groupBox_NewDisabled.BorderColor = Color.FromArgb(51, 51, 51);
-            groupBox_NewDisabled.Controls.Add(listBox_NewlyDisabled);
-            groupBox_NewDisabled.Dock = DockStyle.Fill;
-            groupBox_NewDisabled.Location = new Point(0, 157);
-            groupBox_NewDisabled.Margin = new Padding(0);
-            groupBox_NewDisabled.Name = "groupBox_NewDisabled";
-            groupBox_NewDisabled.Padding = new Padding(0);
-            groupBox_NewDisabled.Size = new Size(272, 157);
-            groupBox_NewDisabled.TabIndex = 5;
-            groupBox_NewDisabled.TabStop = false;
-            groupBox_NewDisabled.Text = "Newly Disabled Flags";
-            // 
-            // listBox_NewlyDisabled
-            // 
-            listBox_NewlyDisabled.BackColor = Color.FromArgb(70, 63, 65);
-            listBox_NewlyDisabled.BorderStyle = BorderStyle.FixedSingle;
-            listBox_NewlyDisabled.ContextMenuStrip = darkContextMenu_RightClick;
-            listBox_NewlyDisabled.Dock = DockStyle.Fill;
-            listBox_NewlyDisabled.ForeColor = Color.Silver;
-            listBox_NewlyDisabled.FormattingEnabled = true;
-            listBox_NewlyDisabled.ItemHeight = 20;
-            listBox_NewlyDisabled.Location = new Point(0, 20);
-            listBox_NewlyDisabled.Name = "listBox_NewlyDisabled";
-            listBox_NewlyDisabled.SelectionMode = SelectionMode.MultiExtended;
-            listBox_NewlyDisabled.Size = new Size(272, 137);
-            listBox_NewlyDisabled.TabIndex = 1;
-            // 
-            // groupBox_NewEnabled
-            // 
-            groupBox_NewEnabled.BackColor = Color.FromArgb(51, 51, 51);
-            groupBox_NewEnabled.BorderColor = Color.FromArgb(51, 51, 51);
-            groupBox_NewEnabled.Controls.Add(listBox_NewlyEnabled);
-            groupBox_NewEnabled.Dock = DockStyle.Fill;
-            groupBox_NewEnabled.Location = new Point(0, 0);
-            groupBox_NewEnabled.Margin = new Padding(0);
-            groupBox_NewEnabled.Name = "groupBox_NewEnabled";
-            groupBox_NewEnabled.Padding = new Padding(0);
-            groupBox_NewEnabled.Size = new Size(272, 157);
-            groupBox_NewEnabled.TabIndex = 4;
-            groupBox_NewEnabled.TabStop = false;
-            groupBox_NewEnabled.Text = "Newly Enabled Flags";
-            // 
-            // listBox_NewlyEnabled
-            // 
-            listBox_NewlyEnabled.BackColor = Color.FromArgb(60, 73, 65);
-            listBox_NewlyEnabled.BorderStyle = BorderStyle.FixedSingle;
-            listBox_NewlyEnabled.ContextMenuStrip = darkContextMenu_RightClick;
-            listBox_NewlyEnabled.Dock = DockStyle.Fill;
-            listBox_NewlyEnabled.ForeColor = Color.Silver;
-            listBox_NewlyEnabled.FormattingEnabled = true;
-            listBox_NewlyEnabled.ItemHeight = 20;
-            listBox_NewlyEnabled.Location = new Point(0, 20);
-            listBox_NewlyEnabled.Name = "listBox_NewlyEnabled";
-            listBox_NewlyEnabled.SelectionMode = SelectionMode.MultiExtended;
-            listBox_NewlyEnabled.Size = new Size(272, 137);
-            listBox_NewlyEnabled.TabIndex = 0;
+            listBox_NewCount.KeyDown += Output_Keydown;
             // 
             // menuStrip_Main
             // 
@@ -472,14 +476,14 @@ namespace P5FlagCompare
             tlp_Checkboxes.PerformLayout();
             groupBox_AllEnabledFlags.ResumeLayout(false);
             metroSetTabControl_FlagType.ResumeLayout(false);
-            tabPage_Count.ResumeLayout(false);
-            tlp_Count.ResumeLayout(false);
-            groupBox_UnsetCount.ResumeLayout(false);
-            groupBox_NewCount.ResumeLayout(false);
             tabPage_BitFlags.ResumeLayout(false);
             tlp_BitFlags.ResumeLayout(false);
             groupBox_NewDisabled.ResumeLayout(false);
             groupBox_NewEnabled.ResumeLayout(false);
+            tabPage_Count.ResumeLayout(false);
+            tlp_Count.ResumeLayout(false);
+            groupBox_UnsetCount.ResumeLayout(false);
+            groupBox_NewCount.ResumeLayout(false);
             menuStrip_Main.ResumeLayout(false);
             menuStrip_Main.PerformLayout();
             ResumeLayout(false);
