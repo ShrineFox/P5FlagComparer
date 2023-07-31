@@ -49,6 +49,8 @@ namespace P5FlagCompare
                 new Tuple<string, string>("pasteFlagsToolStripMenuItem", "paste_plain"),
                 new Tuple<string, string>("deleteToolStripMenuItem", "delete"),
                 new Tuple<string, string>("renameToolStripMenuItem", "textfield_rename"),
+                new Tuple<string, string>("copyToolStripMenuItem", "page_copy"),
+                new Tuple<string, string>("copyAllToolStripMenuItem", "page_white_stack"),
             };
 
             // Context Menu Strips
@@ -78,6 +80,16 @@ namespace P5FlagCompare
         {
             tsmi.Image = Image.FromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                         $"Icons\\{menuStripIcons.Single(x => x.Item1 == tsmi.Name).Item2}.png"));
+        }
+
+        private void CopyAll_Click(object sender, EventArgs e)
+        {
+            CopyAllToClipboard();
+        }
+
+        private void Copy_Click(object sender, EventArgs e)
+        {
+            CopyToClipboard(sender);
         }
     }
 

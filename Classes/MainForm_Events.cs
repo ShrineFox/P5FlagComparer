@@ -14,6 +14,12 @@ namespace P5FlagCompare
     {
         private void Output_Keydown(object sender, KeyEventArgs e)
         {
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C)
+                CopyToClipboard(sender);
+
+            if (e.Modifiers == Keys.Control && e.Modifiers == Keys.Shift && e.KeyCode == Keys.C)
+                CopyAllToClipboard();
+
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.V)
                 CompareFromClipboard();
 

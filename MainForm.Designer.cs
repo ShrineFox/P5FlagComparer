@@ -59,6 +59,9 @@ namespace P5FlagCompare
             saveToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
             pasteFlagsToolStripMenuItem = new ToolStripMenuItem();
+            chk_AutoRename = new DarkCheckBox();
+            copyToolStripMenuItem = new ToolStripMenuItem();
+            copyAllToolStripMenuItem = new ToolStripMenuItem();
             tlp_Main.SuspendLayout();
             darkContextMenu_RightClick.SuspendLayout();
             tlp_Checkboxes.SuspendLayout();
@@ -112,16 +115,16 @@ namespace P5FlagCompare
             darkContextMenu_RightClick.BackColor = Color.FromArgb(60, 63, 65);
             darkContextMenu_RightClick.ForeColor = Color.FromArgb(220, 220, 220);
             darkContextMenu_RightClick.ImageScalingSize = new Size(20, 20);
-            darkContextMenu_RightClick.Items.AddRange(new ToolStripItem[] { renameToolStripMenuItem, deleteToolStripMenuItem });
+            darkContextMenu_RightClick.Items.AddRange(new ToolStripItem[] { renameToolStripMenuItem, deleteToolStripMenuItem, copyToolStripMenuItem });
             darkContextMenu_RightClick.Name = "darkContextMenu_RightClick";
-            darkContextMenu_RightClick.Size = new Size(133, 52);
+            darkContextMenu_RightClick.Size = new Size(211, 104);
             // 
             // renameToolStripMenuItem
             // 
             renameToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
             renameToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
             renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            renameToolStripMenuItem.Size = new Size(132, 24);
+            renameToolStripMenuItem.Size = new Size(210, 24);
             renameToolStripMenuItem.Text = "Rename";
             renameToolStripMenuItem.Click += RenameToolStrip_Click;
             // 
@@ -130,7 +133,7 @@ namespace P5FlagCompare
             deleteToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
             deleteToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(132, 24);
+            deleteToolStripMenuItem.Size = new Size(210, 24);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += DeleteToolStrip_Click;
             // 
@@ -139,13 +142,15 @@ namespace P5FlagCompare
             tlp_Checkboxes.ColumnCount = 2;
             tlp_Checkboxes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
             tlp_Checkboxes.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
+            tlp_Checkboxes.Controls.Add(chk_AutoRename, 0, 1);
             tlp_Checkboxes.Controls.Add(chkBox_Sections, 0, 0);
             tlp_Checkboxes.Controls.Add(lbl_TimeStamp, 1, 0);
             tlp_Checkboxes.Dock = DockStyle.Fill;
             tlp_Checkboxes.Location = new Point(173, 410);
             tlp_Checkboxes.Name = "tlp_Checkboxes";
-            tlp_Checkboxes.RowCount = 1;
+            tlp_Checkboxes.RowCount = 2;
             tlp_Checkboxes.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tlp_Checkboxes.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tlp_Checkboxes.Size = new Size(506, 40);
             tlp_Checkboxes.TabIndex = 4;
             // 
@@ -157,7 +162,7 @@ namespace P5FlagCompare
             chkBox_Sections.Dock = DockStyle.Left;
             chkBox_Sections.Location = new Point(3, 3);
             chkBox_Sections.Name = "chkBox_Sections";
-            chkBox_Sections.Size = new Size(86, 34);
+            chkBox_Sections.Size = new Size(86, 14);
             chkBox_Sections.TabIndex = 4;
             chkBox_Sections.Text = "Sections";
             chkBox_Sections.CheckedChanged += Sections_CheckedChanged;
@@ -167,7 +172,7 @@ namespace P5FlagCompare
             lbl_TimeStamp.Anchor = AnchorStyles.Left;
             lbl_TimeStamp.AutoSize = true;
             lbl_TimeStamp.ForeColor = Color.FromArgb(220, 220, 220);
-            lbl_TimeStamp.Location = new Point(180, 10);
+            lbl_TimeStamp.Location = new Point(180, 0);
             lbl_TimeStamp.Name = "lbl_TimeStamp";
             lbl_TimeStamp.Size = new Size(0, 20);
             lbl_TimeStamp.TabIndex = 5;
@@ -418,6 +423,35 @@ namespace P5FlagCompare
             pasteFlagsToolStripMenuItem.Text = "Paste Flags";
             pasteFlagsToolStripMenuItem.Click += PasteFlags_Click;
             // 
+            // chk_AutoRename
+            // 
+            chk_AutoRename.AutoSize = true;
+            chk_AutoRename.Dock = DockStyle.Left;
+            chk_AutoRename.Location = new Point(3, 23);
+            chk_AutoRename.Name = "chk_AutoRename";
+            chk_AutoRename.Size = new Size(123, 14);
+            chk_AutoRename.TabIndex = 6;
+            chk_AutoRename.Text = "Auto-Rename";
+            // 
+            // copyToolStripMenuItem
+            // 
+            copyToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            copyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { copyAllToolStripMenuItem });
+            copyToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            copyToolStripMenuItem.Size = new Size(210, 24);
+            copyToolStripMenuItem.Text = "Copy Flowscript";
+            copyToolStripMenuItem.Click += Copy_Click;
+            // 
+            // copyAllToolStripMenuItem
+            // 
+            copyAllToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            copyAllToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            copyAllToolStripMenuItem.Name = "copyAllToolStripMenuItem";
+            copyAllToolStripMenuItem.Size = new Size(224, 26);
+            copyAllToolStripMenuItem.Text = "Copy All";
+            copyAllToolStripMenuItem.Click += CopyAll_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -477,5 +511,8 @@ namespace P5FlagCompare
         private DarkGroupBox groupBox_UnsetCount;
         private DarkListView listView_UnsetCounts;
         private ColumnHeader columnHeader;
+        private DarkCheckBox chk_AutoRename;
+        private ToolStripMenuItem copyToolStripMenuItem;
+        private ToolStripMenuItem copyAllToolStripMenuItem;
     }
 }

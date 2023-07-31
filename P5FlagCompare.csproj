@@ -26,6 +26,9 @@
     <Compile Update="Classes\Compare.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Classes\Copy.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>
