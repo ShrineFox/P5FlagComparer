@@ -14,10 +14,13 @@ namespace P5FlagCompare
     {
         private void Output_Keydown(object sender, KeyEventArgs e)
         {
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A)
+                SelectAll(sender);
+
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C)
                 CopyToClipboard(sender);
 
-            if (e.Modifiers == Keys.Control && e.Modifiers == Keys.Shift && e.KeyCode == Keys.C)
+            if (e.Modifiers == Keys.Control && e.Modifiers == Keys.LShiftKey && e.KeyCode == Keys.C)
                 CopyAllToClipboard();
 
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.V)
@@ -28,6 +31,21 @@ namespace P5FlagCompare
 
             if (e.KeyCode == Keys.Delete)
                 RemoveComparison();
+        }
+
+        private void SelectAll(object sender)
+        {
+            string ctrlName = ((Control)sender).Name;
+            if (ctrlName == "listView_EnabledFlags" || ctrlName == "listView_DisabledFlags"
+                || ctrlName == "listView_SetCounts" || ctrlName == "listView_UnsetCounts")
+            {
+                DarkListView listView = (DarkListView)sender;
+                List<int> indexes = new List<int>();
+                for (int i = 0; i < listView.Items.Count(); i++)
+                    indexes.Add(i);
+                if (indexes.Count > 0)
+                    listView.SelectItems(indexes);
+            }
         }
 
         private void Sections_CheckedChanged(object sender, EventArgs e)
@@ -80,6 +98,9 @@ namespace P5FlagCompare
             listView_UnsetCounts.Items.Clear();
             foreach (var count in previousComparison.SetCounts.Where(x => !comparison.SetCounts.Any(y => y.Id.Equals(x.Id))))
                 listView_UnsetCounts.Items.Add(new DarkListItem() { Text = GetMappedName(count.Id, settings.countMappings) + $": 0", Tag = count });
+
+            // Update timestamp
+            lbl_TimeStamp.Text = comparison.TimeStamp;
         }
 
         private Comparison GetSelectedComparison()

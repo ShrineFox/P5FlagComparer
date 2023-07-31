@@ -56,6 +56,8 @@ namespace P5FlagCompare
                     CopySelection(controlSelected);
                 }
             }
+            else
+                CopySelection(sender);
         }
 
         private void CopySelection(object sender)
@@ -91,7 +93,9 @@ namespace P5FlagCompare
 
                     string flagName = bitFlag.Id.ToString();
                     if (!isCount)
-                        flagName = GetFormattedFlag(bitFlag.Id);
+                        flagName = GetMappedName(bitFlag.Id, settings.flagMappings, chkBox_Sections.Checked);
+                    else
+                        flagName = GetMappedName(bitFlag.Id, settings.countMappings);
 
                     if (listView.Name.Contains("EnabledFlags"))
                         clipboardText += $"BIT_ON( {flagName} );";
@@ -102,7 +106,7 @@ namespace P5FlagCompare
                     else if (listView.Name.Contains("UnsetCounts"))
                         clipboardText += $"SET_COUNT( {flagName}, 0 );";
 
-                    if (!string.IsNullOrEmpty(bitFlag.Name))
+                    if (!string.IsNullOrEmpty(bitFlag.Name) && bitFlag.Name != "")
                         clipboardText += $" // {bitFlag.Name}";
 
                     clipboardText += "\n";

@@ -37,7 +37,10 @@ namespace P5FlagCompare
             darkContextMenu_RightClick = new DarkContextMenu();
             renameToolStripMenuItem = new ToolStripMenuItem();
             deleteToolStripMenuItem = new ToolStripMenuItem();
+            copyToolStripMenuItem = new ToolStripMenuItem();
+            copyAllToolStripMenuItem = new ToolStripMenuItem();
             tlp_Checkboxes = new TableLayoutPanel();
+            chk_AutoRename = new DarkCheckBox();
             chkBox_Sections = new DarkCheckBox();
             lbl_TimeStamp = new DarkLabel();
             metroSetTabControl_FlagType = new MetroSet_UI.Controls.MetroSetTabControl();
@@ -59,9 +62,6 @@ namespace P5FlagCompare
             saveToolStripMenuItem = new ToolStripMenuItem();
             loadToolStripMenuItem = new ToolStripMenuItem();
             pasteFlagsToolStripMenuItem = new ToolStripMenuItem();
-            chk_AutoRename = new DarkCheckBox();
-            copyToolStripMenuItem = new ToolStripMenuItem();
-            copyAllToolStripMenuItem = new ToolStripMenuItem();
             tlp_Main.SuspendLayout();
             darkContextMenu_RightClick.SuspendLayout();
             tlp_Checkboxes.SuspendLayout();
@@ -117,14 +117,14 @@ namespace P5FlagCompare
             darkContextMenu_RightClick.ImageScalingSize = new Size(20, 20);
             darkContextMenu_RightClick.Items.AddRange(new ToolStripItem[] { renameToolStripMenuItem, deleteToolStripMenuItem, copyToolStripMenuItem });
             darkContextMenu_RightClick.Name = "darkContextMenu_RightClick";
-            darkContextMenu_RightClick.Size = new Size(211, 104);
+            darkContextMenu_RightClick.Size = new Size(184, 76);
             // 
             // renameToolStripMenuItem
             // 
             renameToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
             renameToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
             renameToolStripMenuItem.Name = "renameToolStripMenuItem";
-            renameToolStripMenuItem.Size = new Size(210, 24);
+            renameToolStripMenuItem.Size = new Size(183, 24);
             renameToolStripMenuItem.Text = "Rename";
             renameToolStripMenuItem.Click += RenameToolStrip_Click;
             // 
@@ -133,9 +133,28 @@ namespace P5FlagCompare
             deleteToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
             deleteToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
             deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            deleteToolStripMenuItem.Size = new Size(210, 24);
+            deleteToolStripMenuItem.Size = new Size(183, 24);
             deleteToolStripMenuItem.Text = "Delete";
             deleteToolStripMenuItem.Click += DeleteToolStrip_Click;
+            // 
+            // copyToolStripMenuItem
+            // 
+            copyToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            copyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { copyAllToolStripMenuItem });
+            copyToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            copyToolStripMenuItem.Name = "copyToolStripMenuItem";
+            copyToolStripMenuItem.Size = new Size(183, 24);
+            copyToolStripMenuItem.Text = "Copy Flowscript";
+            copyToolStripMenuItem.Click += Copy_Click;
+            // 
+            // copyAllToolStripMenuItem
+            // 
+            copyAllToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
+            copyAllToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
+            copyAllToolStripMenuItem.Name = "copyAllToolStripMenuItem";
+            copyAllToolStripMenuItem.Size = new Size(148, 26);
+            copyAllToolStripMenuItem.Text = "Copy All";
+            copyAllToolStripMenuItem.Click += CopyAll_Click;
             // 
             // tlp_Checkboxes
             // 
@@ -153,6 +172,17 @@ namespace P5FlagCompare
             tlp_Checkboxes.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tlp_Checkboxes.Size = new Size(506, 40);
             tlp_Checkboxes.TabIndex = 4;
+            // 
+            // chk_AutoRename
+            // 
+            chk_AutoRename.AutoSize = true;
+            chk_AutoRename.Dock = DockStyle.Left;
+            chk_AutoRename.Location = new Point(3, 23);
+            chk_AutoRename.Name = "chk_AutoRename";
+            chk_AutoRename.Size = new Size(123, 14);
+            chk_AutoRename.TabIndex = 6;
+            chk_AutoRename.Text = "Auto-Rename";
+            chk_AutoRename.Visible = false;
             // 
             // chkBox_Sections
             // 
@@ -422,35 +452,6 @@ namespace P5FlagCompare
             pasteFlagsToolStripMenuItem.Size = new Size(95, 24);
             pasteFlagsToolStripMenuItem.Text = "Paste Flags";
             pasteFlagsToolStripMenuItem.Click += PasteFlags_Click;
-            // 
-            // chk_AutoRename
-            // 
-            chk_AutoRename.AutoSize = true;
-            chk_AutoRename.Dock = DockStyle.Left;
-            chk_AutoRename.Location = new Point(3, 23);
-            chk_AutoRename.Name = "chk_AutoRename";
-            chk_AutoRename.Size = new Size(123, 14);
-            chk_AutoRename.TabIndex = 6;
-            chk_AutoRename.Text = "Auto-Rename";
-            // 
-            // copyToolStripMenuItem
-            // 
-            copyToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
-            copyToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { copyAllToolStripMenuItem });
-            copyToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
-            copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            copyToolStripMenuItem.Size = new Size(210, 24);
-            copyToolStripMenuItem.Text = "Copy Flowscript";
-            copyToolStripMenuItem.Click += Copy_Click;
-            // 
-            // copyAllToolStripMenuItem
-            // 
-            copyAllToolStripMenuItem.BackColor = Color.FromArgb(60, 63, 65);
-            copyAllToolStripMenuItem.ForeColor = Color.FromArgb(220, 220, 220);
-            copyAllToolStripMenuItem.Name = "copyAllToolStripMenuItem";
-            copyAllToolStripMenuItem.Size = new Size(224, 26);
-            copyAllToolStripMenuItem.Text = "Copy All";
-            copyAllToolStripMenuItem.Click += CopyAll_Click;
             // 
             // MainForm
             // 
