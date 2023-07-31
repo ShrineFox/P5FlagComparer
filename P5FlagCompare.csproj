@@ -22,4 +22,10 @@
     <ProjectReference Include="..\ShrineFox.IO\ShrineFox.IO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Classes\Compare.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>
