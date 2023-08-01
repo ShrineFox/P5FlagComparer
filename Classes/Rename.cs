@@ -1,14 +1,5 @@
 ﻿using DarkUI.Controls;
 using DarkUI.Forms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using YamlDotNet.Serialization;
-using static P5FlagCompare.MainForm;
 
 namespace P5FlagCompare
 {
@@ -40,7 +31,7 @@ namespace P5FlagCompare
                 if (listView.SelectedIndices.Count <= 0)
                     return;
 
-                RenameItem(listView, ctrlName.Contains("Count"));
+                RenameItems(listView, ctrlName.Contains("Count"));
             }
             else
                 RenameComparison();
@@ -60,6 +51,7 @@ namespace P5FlagCompare
                 string newName = renameForm.RenameText;
                 if (newName == "")
                     newName = "Untitled";
+
                 // Set unique placeholder name
                 int i = 1;
                 string name = newName;
@@ -68,119 +60,117 @@ namespace P5FlagCompare
                     i++;
                     name = newName + " " + i;
                 }
+
+                // Set comparison in listView to new name
+                comparison.Name = name;
+                listView_Comparisons.Items[listView_Comparisons.SelectedIndices.Last()].Tag = comparison;
                 listView_Comparisons.Items[listView_Comparisons.SelectedIndices.Last()].Text = name;
+
+                if (chk_AutoRename.Checked && name != "" && name != "Untitled")
+                    RenameAllItems(name);
             }
         }
 
-        private void RenameItem(DarkListView listView, bool isCount = false)
+        private void RenameAllItems(string name)
+        {
+            foreach (DarkListView listView in new DarkListView[] { listView_EnabledFlags, listView_DisabledFlags, listView_SetCounts, listView_UnsetCounts })
+            {
+                bool isCount = listView.Name.Contains("Count");
+
+                foreach (var item in listView.Items)
+                {
+                    if (!item.Text.Contains("//"))
+                    {
+                        BitFlag flag = (BitFlag)item.Tag;
+                        if (!isCount)
+                            item.Text = $"{GetFormattedFlag(flag.Id)} // {SetNewName(name, flag.Id, isCount)}";
+                        else
+                            item.Text = $"{flag.Id}: {flag.Value} // {SetNewName(name, flag.Id, isCount)}";
+                    }
+                }
+            }
+        }
+
+        private string SetNewName(string name, int id, bool isCount)
+        {
+            string newName = name;
+
+            if (!isCount)
+            {
+                // Remove existing mapping if one exists
+                if (settings.flagMappings.Any(x => x.Id.Equals(id)))
+                    settings.flagMappings.Remove(settings.flagMappings.First(x => x.Id.Equals(id)));
+                if (name != "")
+                {
+                    // Set unique name
+                    int i = 1;
+                    while (settings.flagMappings.Any(x => x.Name.Equals(newName)))
+                    {
+                        i++;
+                        newName = name + " " + i;
+                    }
+
+                    // Add new mapping
+                    settings.flagMappings.Add(new BitFlag() { Id = id, Name = newName });
+                    // Re-order flagMappings in numerical order by flag ID
+                    settings.flagMappings = settings.flagMappings.OrderBy(x => x.Id).ToList();
+                }
+            }
+            else
+            {
+                // Remove existing mapping if one exists
+                if (settings.countMappings.Any(x => x.Id.Equals(id)))
+                    settings.countMappings.Remove(settings.countMappings.First(x => x.Id.Equals(id)));
+                if (name != "")
+                {
+                    // Set unique name
+                    int i = 1;
+                    while (settings.countMappings.Any(x => x.Name.Equals(newName)))
+                    {
+                        i++;
+                        newName = name + " " + i;
+                    }
+
+                    // Add new mapping
+                    settings.countMappings.Add(new BitFlag() { Id = id, Name = newName });
+                    // Re-order flagMappings in numerical order by flag ID
+                    settings.countMappings = settings.countMappings.OrderBy(x => x.Id).ToList();
+                }
+            }
+
+            return newName;
+        }
+
+        private void RenameItems(DarkListView listView, bool isCount = false)
         {
             if (listView.SelectedIndices.Count <= 0)
                 return;
 
-            int selectedIndex = listView.SelectedIndices.Last();
-            BitFlag flag = (BitFlag)listView.Items[selectedIndex].Tag;
+            List<BitFlag> mapping = settings.flagMappings;
+            if (isCount)
+                mapping = settings.countMappings;
 
-            string newName = RenameById(flag.Id, isCount);
-
-            if (listView.SelectedIndices.Count > 1)
-            {
-                foreach (int index in listView.SelectedIndices)
-                {
-
-                    flag = (BitFlag)listView.Items[index].Tag;
-                    SetName(listView, index, flag, newName, isCount);
-                }
-            }
-            else
-                SetName(listView, selectedIndex, flag, newName, isCount);
-        }
-
-        private void SetName(DarkListView listView, int index, BitFlag flag, string newName, bool isCount = false)
-        {
-            // Set unique placeholder name
-            int i = 1;
-            string name = newName;
-
-            while (listView.Items.Any(x => x.Text.Equals(name)))
-            {
-                i++;
-                name = newName + " " + i;
-            }
-
-            List<BitFlag> mappings = new List<BitFlag>();
-            if (!isCount)
-            {
-                SetNewFlagName(name, flag.Id);
-                mappings = settings.flagMappings;
-            }
-            else
-            {
-                SetNewCountName(name, flag.Id);
-                mappings = settings.countMappings;
-            }
-
-            listView.Items[index].Text = GetMappedName(flag.Id, mappings, chkBox_Sections.Checked);
-        }
-
-        private string RenameById(int id, bool isCount = false)
-        {
-            // Get old mapped name if one exists
-            string oldName = "";
-            if (!isCount)
-            {
-                if (settings.flagMappings.Any(x => x.Id.Equals(id)))
-                    oldName = settings.flagMappings.First(x => x.Id.Equals(id)).Name;
-            }
-            else
-            {
-                if (settings.countMappings.Any(x => x.Id.Equals(id)))
-                    oldName = settings.countMappings.First(x => x.Id.Equals(id)).Name;
-            }
-
-            RenameForm renameForm = new RenameForm(oldName);
+            BitFlag selectedFlag = (BitFlag)listView.Items[listView.SelectedIndices.Last()].Tag;
+            RenameForm renameForm = new RenameForm(GetMappedName(selectedFlag.Id, mapping));
             var result = renameForm.ShowDialog();
             if (result == DialogResult.OK)
             {
                 string newName = renameForm.RenameText;
 
-                if (!isCount)
-                    SetNewFlagName(newName, id);
-                else
-                    SetNewCountName(newName, id);
+                foreach (int index in listView.SelectedIndices)
+                {
+                    BitFlag flag = (BitFlag)listView.Items[index].Tag;
+                    string name = SetNewName(newName, flag.Id, isCount);
 
-                return newName;
+                    if (isCount)
+                        listView.Items[index].Text = $"{flag.Id}: {flag.Value}";
+                    else
+                        listView.Items[index].Text = $"{GetFormattedFlag(flag.Id)}";
+
+                    if (!string.IsNullOrEmpty(name))
+                        listView.Items[index].Text += $" // {name}";
+                }
             }
-
-            return oldName;
-        }
-
-        private void SetNewFlagName(string name, int id)
-        {
-            // Remove existing mapping if one exists
-            if (settings.flagMappings.Any(x => x.Id.Equals(id)))
-                settings.flagMappings.Remove(settings.flagMappings.First(x => x.Id.Equals(id)));
-            if (name != "")
-            {
-                // Add new mapping
-                settings.flagMappings.Add(new BitFlag() { Id = id, Name = name });
-                // Re-order flagMappings in numerical order by flag ID
-                settings.flagMappings = settings.flagMappings.OrderBy(x => x.Id).ToList();
-            }
-        }
-
-        private void SetNewCountName(string name, int id)
-        {
-            // Remove existing mapping if one exists
-            if (settings.countMappings.Any(x => x.Id.Equals(id)))
-                settings.countMappings.Remove(settings.countMappings.First(x => x.Id.Equals(id)));
-            if (name != "")
-            {
-                // Add new mapping
-                settings.countMappings.Add(new BitFlag() { Id = id, Name = name });
-                // Re-order countMappings in numerical order by count ID
-                settings.countMappings = settings.countMappings.OrderBy(x => x.Id).ToList();
-            }
-
         }
 
         private string GetFormattedFlag(int flagId)
@@ -203,21 +193,12 @@ namespace P5FlagCompare
             return name;
         }
 
-        private string GetMappedName(int flagId, List<BitFlag> list, bool useFlagSections = false)
+        private string GetMappedName(int id, List<BitFlag> list)
         {
-            string mappedName = "";
-            if (useFlagSections)
-                mappedName = GetFormattedFlag(flagId);
-            else
-                mappedName = flagId.ToString();
+            if (list.Any(x => x.Id.Equals(id)))
+                return list.First(x => x.Id.Equals(id)).Name;
 
-            if (list.Any(x => x.Id.Equals(flagId)))
-            {
-                BitFlag bitFlag = list.First(x => x.Id.Equals(flagId));
-                mappedName += $" // {bitFlag.Name}";
-            }
-
-            return mappedName;
+            return "";
         }
     }
 }

@@ -1,12 +1,6 @@
 ﻿using DarkUI.Controls;
 using DarkUI.Forms;
 using ShrineFox.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static P5FlagCompare.MainForm;
 
 namespace P5FlagCompare
 {

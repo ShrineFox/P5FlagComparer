@@ -182,7 +182,6 @@ namespace P5FlagCompare
             chk_AutoRename.Size = new Size(123, 14);
             chk_AutoRename.TabIndex = 6;
             chk_AutoRename.Text = "Auto-Rename";
-            chk_AutoRename.Visible = false;
             // 
             // chkBox_Sections
             // 

@@ -1,13 +1,5 @@
 ﻿using DarkUI.Controls;
 using DarkUI.Forms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using YamlDotNet.Serialization;
 
 namespace P5FlagCompare
 {
@@ -24,15 +16,15 @@ namespace P5FlagCompare
             foreach (var enabledFlag in comparison.EnabledFlags)
             {
                 clipboardText += $"BIT_ON( {GetFormattedFlag(enabledFlag.Id)} );";
-                if (!string.IsNullOrEmpty(enabledFlag.Name))
-                    clipboardText += $" // {enabledFlag.Name}";
+                if (!string.IsNullOrEmpty(GetMappedName(enabledFlag.Id, settings.flagMappings)))
+                    clipboardText += $" // {GetMappedName(enabledFlag.Id, settings.flagMappings)}";
                 clipboardText += "\n";
             }
             foreach (var setCount in comparison.SetCounts)
             {
                 clipboardText += $"SET_COUNT( {setCount.Id}, {setCount.Value} );";
-                if (!string.IsNullOrEmpty(setCount.Name))
-                    clipboardText += $" // {setCount.Name}";
+                if (!string.IsNullOrEmpty(GetMappedName(setCount.Id, settings.countMappings)))
+                    clipboardText += $" // {GetMappedName(setCount.Id, settings.countMappings)}";
                 clipboardText += "\n";
             }
 
@@ -51,10 +43,7 @@ namespace P5FlagCompare
                 ContextMenuStrip menu = menuItem.Owner as ContextMenuStrip;
 
                 if (menu != null)
-                {
-                    Control controlSelected = menu.SourceControl;
-                    CopySelection(controlSelected);
-                }
+                    CopySelection(menu.SourceControl);
             }
             else
                 CopySelection(sender);
@@ -91,23 +80,23 @@ namespace P5FlagCompare
                 {
                     BitFlag bitFlag = (BitFlag)listView.Items[index].Tag;
 
-                    string flagName = bitFlag.Id.ToString();
+                    string flagName = "";
                     if (!isCount)
-                        flagName = GetMappedName(bitFlag.Id, settings.flagMappings, chkBox_Sections.Checked);
+                        flagName = GetMappedName(bitFlag.Id, settings.flagMappings);
                     else
                         flagName = GetMappedName(bitFlag.Id, settings.countMappings);
 
                     if (listView.Name.Contains("EnabledFlags"))
-                        clipboardText += $"BIT_ON( {flagName} );";
+                        clipboardText += $"BIT_ON( {bitFlag.Id} );";
                     else if (listView.Name.Contains("DisabledFlags"))
-                        clipboardText += $"BIT_OFF( {flagName} );";
+                        clipboardText += $"BIT_OFF( {bitFlag.Id} );";
                     else if (listView.Name.Contains("SetCounts"))
-                        clipboardText += $"SET_COUNT( {flagName}, {bitFlag.Value} );";
+                        clipboardText += $"SET_COUNT( {bitFlag.Id}, {bitFlag.Value} );";
                     else if (listView.Name.Contains("UnsetCounts"))
-                        clipboardText += $"SET_COUNT( {flagName}, 0 );";
+                        clipboardText += $"SET_COUNT( {bitFlag.Id}, 0 );";
 
-                    if (!string.IsNullOrEmpty(bitFlag.Name) && bitFlag.Name != "")
-                        clipboardText += $" // {bitFlag.Name}";
+                    if (!string.IsNullOrEmpty(flagName))
+                        clipboardText += $" // {flagName}";
 
                     clipboardText += "\n";
                 }

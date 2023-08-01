@@ -2,11 +2,6 @@
 using DarkUI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace P5FlagCompare
 {
@@ -17,11 +12,10 @@ namespace P5FlagCompare
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.A)
                 SelectAll(sender);
 
-            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C)
-                CopyToClipboard(sender);
-
-            if (e.Modifiers == Keys.Control && e.Modifiers == Keys.LShiftKey && e.KeyCode == Keys.C)
+            if (e.Modifiers == Keys.Control && e.Modifiers == Keys.Shift && e.KeyCode == Keys.C)
                 CopyAllToClipboard();
+            else if (e.Modifiers == Keys.Control && e.KeyCode == Keys.C)
+                CopyToClipboard(sender);
 
             if (e.Modifiers == Keys.Control && e.KeyCode == Keys.V)
                 CompareFromClipboard();
@@ -50,18 +44,20 @@ namespace P5FlagCompare
 
         private void Sections_CheckedChanged(object sender, EventArgs e)
         {
-            // Update names of items in enabled flags list depending on whether flag sections are enabled
-            foreach (var item in listView_EnabledFlags.Items)
+            // Update names of items in listViews depending on whether flag sections are enabled
+            foreach (var listView in new DarkListView[] { listView_EnabledFlags, listView_DisabledFlags })
             {
-                BitFlag bitFlag = (BitFlag)item.Tag;
-                item.Text = GetMappedName(bitFlag.Id, settings.flagMappings, chkBox_Sections.Checked);
+                foreach (var item in listView.Items)
+                {
+                    BitFlag bitFlag = (BitFlag)item.Tag;
+                    item.Text = GetFormattedFlag(bitFlag.Id);
+
+                    string name = GetMappedName(bitFlag.Id, settings.flagMappings);
+                    if (!string.IsNullOrEmpty(name))
+                        item.Text += $" // {name}";
+                }
             }
-            // Update names of items in disabled flags list depending on whether flag sections are enabled
-            foreach (var item in listView_DisabledFlags.Items)
-            {
-                BitFlag bitFlag = (BitFlag)item.Tag;
-                item.Text = GetMappedName(bitFlag.Id, settings.flagMappings, chkBox_Sections.Checked);
-            }
+            
         }
 
         private void SelectedComparison_Changed(object sender, EventArgs e)
@@ -84,21 +80,52 @@ namespace P5FlagCompare
             // If previous comparison has any flag Ids enabled that the latest comparison doesn't, add to listView
             listView_EnabledFlags.Items.Clear();
             foreach (var flag in comparison.EnabledFlags.Where(x => !previousComparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))))
-                listView_EnabledFlags.Items.Add(new DarkListItem() { Text = GetMappedName(flag.Id, settings.flagMappings, chkBox_Sections.Checked), Tag = flag });
+            {
+                var listItem = new DarkListItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
+
+                string name = GetMappedName(flag.Id, settings.flagMappings);
+                if (!string.IsNullOrEmpty(name))
+                    listItem.Text += $" // {name}";
+
+                listView_EnabledFlags.Items.Add(listItem);
+            }
             // If previous comparison has any flag Ids disabled that the latest comparison doesn't, add to listView
             listView_DisabledFlags.Items.Clear();
             foreach (var flag in previousComparison.EnabledFlags.Where(x => !comparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))))
-                listView_DisabledFlags.Items.Add(new DarkListItem() { Text = GetMappedName(flag.Id, settings.flagMappings, chkBox_Sections.Checked), Tag = flag });
+            {
+                var listItem = new DarkListItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
+
+                string name = GetMappedName(flag.Id, settings.flagMappings);
+                if (!string.IsNullOrEmpty(name))
+                    listItem.Text += $" // {name}";
+
+                listView_DisabledFlags.Items.Add(listItem);
+            }
             // If previous comparison has any count Ids set that the latest comparison doesn't, add to listView
             listView_SetCounts.Items.Clear();
             foreach (var count in comparison.SetCounts.Where(x => !previousComparison.SetCounts.Any(y => y.Id.Equals(x.Id)) 
             || previousComparison.SetCounts.Single(y => y.Id.Equals(x.Id)).Value != x.Value))
-                listView_SetCounts.Items.Add(new DarkListItem() { Text = GetMappedName(count.Id, settings.countMappings) + $": {count.Value}", Tag = count });
+            {
+                var listItem = new DarkListItem() { Text = $"{count.Id}: {count.Value}", Tag = count };
+
+                string name = GetMappedName(count.Id, settings.countMappings);
+                if (!string.IsNullOrEmpty(name))
+                    listItem.Text += $" // {name}";
+
+                listView_SetCounts.Items.Add(listItem);
+            }
             // If previous comparison has any count Ids unset that the latest comparison doesn't, add to listView
             listView_UnsetCounts.Items.Clear();
             foreach (var count in previousComparison.SetCounts.Where(x => !comparison.SetCounts.Any(y => y.Id.Equals(x.Id))))
-                listView_UnsetCounts.Items.Add(new DarkListItem() { Text = GetMappedName(count.Id, settings.countMappings) + $": 0", Tag = count });
+            {
+                var listItem = new DarkListItem() { Text = $"{count.Id}: 0", Tag = count };
 
+                string name = GetMappedName(count.Id, settings.countMappings);
+                if (!string.IsNullOrEmpty(name))
+                    listItem.Text += $" // {name}";
+
+                listView_UnsetCounts.Items.Add(listItem);
+            }
             // Update timestamp
             lbl_TimeStamp.Text = comparison.TimeStamp;
         }

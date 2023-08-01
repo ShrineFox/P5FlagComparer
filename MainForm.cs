@@ -1,10 +1,6 @@
 using System.Reflection;
-using System.Windows.Forms;
 using DarkUI.Controls;
 using DarkUI.Forms;
-using Newtonsoft.Json;
-using ShrineFox.IO;
-using static P5FlagCompare.MainForm;
 
 namespace P5FlagCompare
 {
