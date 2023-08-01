@@ -158,7 +158,9 @@ namespace P5FlagCompare
             if (!outPath.ToLower().EndsWith(".json"))
                 outPath += ".json";
 
-            File.WriteAllText(outPath, JsonConvert.SerializeObject(settings, Newtonsoft.Json.Formatting.Indented));
+            string jsonText = JsonConvert.SerializeObject(settings, Newtonsoft.Json.Formatting.Indented);
+            jsonText = jsonText.Replace("          \"Name\": \"Untitled\",\r\n", "").Replace("          \"Value\": 0\r\n", "");
+            File.WriteAllText(outPath, jsonText);
             MessageBox.Show($"Saved project file to:\n{outPath}", "Preset Project Successfully");
         }
 
