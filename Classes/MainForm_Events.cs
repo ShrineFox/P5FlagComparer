@@ -128,6 +128,14 @@ namespace P5FlagCompare
             }
             // Update timestamp
             lbl_TimeStamp.Text = comparison.TimeStamp;
+
+            // Remove current comparison and select latest if all listViews are empty
+            if (listView_UnsetCounts.Items.Count == 0 && listView_SetCounts.Items.Count == 0
+                && listView_DisabledFlags.Items.Count == 0 && listView_EnabledFlags.Items.Count == 0)
+            {
+                listView_Comparisons.Items.RemoveAt(listView_Comparisons.SelectedIndices.Last());
+                listView_Comparisons.SelectItem(listView_Comparisons.Items.Count - 1);
+            }
         }
 
         private Comparison GetSelectedComparison()
@@ -150,27 +158,38 @@ namespace P5FlagCompare
 
         private void Save_Click(object sender, EventArgs e)
         {
-            var selection = WinFormsEvents.FilePath_Click("Save Project...", true, new string[] { "Project JSON (.json)" }, true);
-            if (selection == null || selection.Count == 0 || string.IsNullOrEmpty(selection.First()))
+            // Replace comparisons object with only data from form
+            List<Comparison> comparisons = new List<Comparison>();
+            foreach (var item in listView_Comparisons.Items)
+                comparisons.Add((Comparison)item.Tag);
+            settings.comparisons = comparisons;
+
+            // Get output path from file select prompt
+            var outPaths = WinFormsEvents.FilePath_Click("Save Project...", true, new string[] { "Project JSON (.json)" }, true);
+            if (outPaths == null || outPaths.Count == 0 || string.IsNullOrEmpty(outPaths.First()))
                 return;
 
-            string outPath = selection.First();
+            // Ensure output path ends with .json
+            string outPath = outPaths.First();
             if (!outPath.ToLower().EndsWith(".json"))
                 outPath += ".json";
 
+            // Remove default values from serialized objects
             string jsonText = JsonConvert.SerializeObject(settings, Newtonsoft.Json.Formatting.Indented);
             jsonText = jsonText.Replace("          \"Name\": \"Untitled\",\r\n", "").Replace("          \"Value\": 0\r\n", "");
+            
+            // Save to .json file
             File.WriteAllText(outPath, jsonText);
             MessageBox.Show($"Saved project file to:\n{outPath}", "Preset Project Successfully");
         }
 
         private void Load_Click(object sender, EventArgs e)
         {
-            var selection = WinFormsEvents.FilePath_Click("Load Project...", true, new string[] { "Project JSON (.json)" });
-            if (selection == null || selection.Count == 0 || string.IsNullOrEmpty(selection.First()))
+            var filePaths = WinFormsEvents.FilePath_Click("Load Project...", true, new string[] { "Project JSON (.json)" });
+            if (filePaths == null || filePaths.Count == 0 || string.IsNullOrEmpty(filePaths.First()))
                 return;
 
-            settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(selection.First()));
+            settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(filePaths.First()));
 
             listView_Comparisons.Items.Clear();
             foreach (var comparison in settings.comparisons)

@@ -64,15 +64,10 @@ namespace P5FlagCompare
                 comparison.Name = name + i;
             }
 
-            // Add to comparison list and update form if different from previous comparison
-            Comparison previousComparison = GetPreviousComparison();
-            if (comparison.EnabledFlags.Count > 0 || comparison.SetCounts.Count > 0
-                && (!comparison.EnabledFlags.SequenceEqual(previousComparison.EnabledFlags) || !comparison.SetCounts.SequenceEqual(previousComparison.SetCounts)))
-            {
-                settings.comparisons.Add(comparison);
-                listView_Comparisons.Items.Add(new DarkListItem() { Text = comparison.Name, Tag = comparison });
-                listView_Comparisons.SelectItem(listView_Comparisons.Items.Count - 1);
-            }
+            // Add to comparison list and update form
+            settings.comparisons.Add(comparison);
+            listView_Comparisons.Items.Add(new DarkListItem() { Text = comparison.Name, Tag = comparison });
+            listView_Comparisons.SelectItem(listView_Comparisons.Items.Count - 1);
         }
 
         private void RemoveComparison()

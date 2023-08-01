@@ -80,8 +80,8 @@ namespace P5FlagCompare
             // tlp_Main
             // 
             tlp_Main.ColumnCount = 2;
-            tlp_Main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tlp_Main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 75F));
+            tlp_Main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
+            tlp_Main.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
             tlp_Main.Controls.Add(listView_Comparisons, 0, 1);
             tlp_Main.Controls.Add(tlp_Checkboxes, 1, 3);
             tlp_Main.Controls.Add(metroSetTabControl_FlagType, 1, 1);
@@ -105,7 +105,7 @@ namespace P5FlagCompare
             listView_Comparisons.Location = new Point(3, 48);
             listView_Comparisons.Name = "listView_Comparisons";
             tlp_Main.SetRowSpan(listView_Comparisons, 3);
-            listView_Comparisons.Size = new Size(164, 402);
+            listView_Comparisons.Size = new Size(232, 402);
             listView_Comparisons.TabIndex = 0;
             listView_Comparisons.SelectedIndicesChanged += SelectedComparison_Changed;
             listView_Comparisons.KeyDown += Output_Keydown;
@@ -165,12 +165,12 @@ namespace P5FlagCompare
             tlp_Checkboxes.Controls.Add(chkBox_Sections, 0, 0);
             tlp_Checkboxes.Controls.Add(lbl_TimeStamp, 1, 0);
             tlp_Checkboxes.Dock = DockStyle.Fill;
-            tlp_Checkboxes.Location = new Point(173, 410);
+            tlp_Checkboxes.Location = new Point(241, 410);
             tlp_Checkboxes.Name = "tlp_Checkboxes";
             tlp_Checkboxes.RowCount = 2;
             tlp_Checkboxes.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tlp_Checkboxes.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlp_Checkboxes.Size = new Size(506, 40);
+            tlp_Checkboxes.Size = new Size(438, 40);
             tlp_Checkboxes.TabIndex = 4;
             // 
             // chk_AutoRename
@@ -201,7 +201,7 @@ namespace P5FlagCompare
             lbl_TimeStamp.Anchor = AnchorStyles.Left;
             lbl_TimeStamp.AutoSize = true;
             lbl_TimeStamp.ForeColor = Color.FromArgb(220, 220, 220);
-            lbl_TimeStamp.Location = new Point(180, 0);
+            lbl_TimeStamp.Location = new Point(156, 0);
             lbl_TimeStamp.Name = "lbl_TimeStamp";
             lbl_TimeStamp.Size = new Size(0, 20);
             lbl_TimeStamp.TabIndex = 5;
@@ -217,13 +217,13 @@ namespace P5FlagCompare
             metroSetTabControl_FlagType.Dock = DockStyle.Fill;
             metroSetTabControl_FlagType.IsDerivedStyle = false;
             metroSetTabControl_FlagType.ItemSize = new Size(100, 38);
-            metroSetTabControl_FlagType.Location = new Point(170, 45);
+            metroSetTabControl_FlagType.Location = new Point(238, 45);
             metroSetTabControl_FlagType.Margin = new Padding(0);
             metroSetTabControl_FlagType.Name = "metroSetTabControl_FlagType";
             tlp_Main.SetRowSpan(metroSetTabControl_FlagType, 2);
             metroSetTabControl_FlagType.SelectedIndex = 0;
             metroSetTabControl_FlagType.SelectedTextColor = Color.White;
-            metroSetTabControl_FlagType.Size = new Size(512, 362);
+            metroSetTabControl_FlagType.Size = new Size(444, 362);
             metroSetTabControl_FlagType.SizeMode = TabSizeMode.Fixed;
             metroSetTabControl_FlagType.Speed = 100;
             metroSetTabControl_FlagType.Style = MetroSet_UI.Enums.Style.Dark;
@@ -242,7 +242,7 @@ namespace P5FlagCompare
             tabPage_BitFlags.ForeColor = Color.Silver;
             tabPage_BitFlags.Location = new Point(4, 42);
             tabPage_BitFlags.Name = "tabPage_BitFlags";
-            tabPage_BitFlags.Size = new Size(504, 316);
+            tabPage_BitFlags.Size = new Size(436, 316);
             tabPage_BitFlags.TabIndex = 0;
             tabPage_BitFlags.Text = "Bit Flags";
             // 
@@ -259,7 +259,7 @@ namespace P5FlagCompare
             tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tlp_BitFlags.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tlp_BitFlags.Size = new Size(504, 316);
+            tlp_BitFlags.Size = new Size(436, 316);
             tlp_BitFlags.TabIndex = 0;
             // 
             // groupBox_NewDisabled
@@ -271,7 +271,7 @@ namespace P5FlagCompare
             groupBox_NewDisabled.Margin = new Padding(0);
             groupBox_NewDisabled.Name = "groupBox_NewDisabled";
             groupBox_NewDisabled.Padding = new Padding(0);
-            groupBox_NewDisabled.Size = new Size(504, 158);
+            groupBox_NewDisabled.Size = new Size(436, 158);
             groupBox_NewDisabled.TabIndex = 5;
             groupBox_NewDisabled.TabStop = false;
             groupBox_NewDisabled.Text = "Newly Disabled Flags";
@@ -285,7 +285,7 @@ namespace P5FlagCompare
             listView_DisabledFlags.Location = new Point(0, 20);
             listView_DisabledFlags.MultiSelect = true;
             listView_DisabledFlags.Name = "listView_DisabledFlags";
-            listView_DisabledFlags.Size = new Size(504, 138);
+            listView_DisabledFlags.Size = new Size(436, 138);
             listView_DisabledFlags.TabIndex = 1;
             listView_DisabledFlags.KeyDown += Output_Keydown;
             // 
@@ -299,7 +299,7 @@ namespace P5FlagCompare
             groupBox_NewEnabled.Margin = new Padding(0);
             groupBox_NewEnabled.Name = "groupBox_NewEnabled";
             groupBox_NewEnabled.Padding = new Padding(0);
-            groupBox_NewEnabled.Size = new Size(504, 158);
+            groupBox_NewEnabled.Size = new Size(436, 158);
             groupBox_NewEnabled.TabIndex = 4;
             groupBox_NewEnabled.TabStop = false;
             groupBox_NewEnabled.Text = "Newly Enabled Flags";
@@ -313,7 +313,7 @@ namespace P5FlagCompare
             listView_EnabledFlags.Location = new Point(0, 20);
             listView_EnabledFlags.MultiSelect = true;
             listView_EnabledFlags.Name = "listView_EnabledFlags";
-            listView_EnabledFlags.Size = new Size(504, 138);
+            listView_EnabledFlags.Size = new Size(436, 138);
             listView_EnabledFlags.TabIndex = 0;
             listView_EnabledFlags.KeyDown += Output_Keydown;
             // 
@@ -460,6 +460,7 @@ namespace P5FlagCompare
             Controls.Add(menuStrip_Main);
             Controls.Add(tlp_Main);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(700, 500);
             Name = "MainForm";
             Text = "P5 Flag Comparer";
             KeyDown += Output_Keydown;
