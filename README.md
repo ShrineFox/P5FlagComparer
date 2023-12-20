@@ -1,5 +1,5 @@
 ![](https://i.imgur.com/dTmMrQP.png)  
-# P5FlagComparer
+# P5RFlagComparerr
 Compares flag dumps to narrow down newly enabled/disabled flag IDs
 
 # What is this?

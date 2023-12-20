@@ -1,11 +1,15 @@
-﻿using DarkUI.Controls;
-using DarkUI.Forms;
+﻿using MetroSet_UI.Forms;
 using Newtonsoft.Json;
 using ShrineFox.IO;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
-namespace P5FlagCompare
+namespace P5RFlagComparer
 {
-    public partial class MainForm: DarkForm
+    public partial class MainForm: MetroSetForm
     {
         private void Output_Keydown(object sender, KeyEventArgs e)
         {
@@ -33,21 +37,22 @@ namespace P5FlagCompare
             if (ctrlName == "listView_EnabledFlags" || ctrlName == "listView_DisabledFlags"
                 || ctrlName == "listView_SetCounts" || ctrlName == "listView_UnsetCounts")
             {
-                DarkListView listView = (DarkListView)sender;
+                ListView listView = (ListView)sender;
                 List<int> indexes = new List<int>();
-                for (int i = 0; i < listView.Items.Count(); i++)
+                for (int i = 0; i < listView.Items.Count; i++)
                     indexes.Add(i);
                 if (indexes.Count > 0)
-                    listView.SelectItems(indexes);
+                    foreach (var index in indexes)
+                        listView.Items[index].Selected = true;
             }
         }
 
         private void Sections_CheckedChanged(object sender, EventArgs e)
         {
             // Update names of items in listViews depending on whether flag sections are enabled
-            foreach (var listView in new DarkListView[] { listView_EnabledFlags, listView_DisabledFlags })
+            foreach (var listView in new ListView[] { listView_EnabledFlags, listView_DisabledFlags })
             {
-                foreach (var item in listView.Items)
+                foreach (ListViewItem item in listView.Items)
                 {
                     BitFlag bitFlag = (BitFlag)item.Tag;
                     item.Text = GetFormattedFlag(bitFlag.Id);
@@ -62,13 +67,13 @@ namespace P5FlagCompare
 
         private void SelectedComparison_Changed(object sender, EventArgs e)
         {
-            UpdateDarkListViews();
+            UpdateListViews();
         }
 
-        private void UpdateDarkListViews()
+        private void UpdateListViews()
         {
             // Compare flags/counts between selected comparison and previous and update listViews
-            if (listView_Comparisons.SelectedIndices.Count <= 0)
+            if (listBox_Comparisons.SelectedIndices.Count <= 0)
                 return;
 
             // Get currently selected comparison
@@ -81,7 +86,7 @@ namespace P5FlagCompare
             listView_EnabledFlags.Items.Clear();
             foreach (var flag in comparison.EnabledFlags.Where(x => !previousComparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))))
             {
-                var listItem = new DarkListItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
+                var listItem = new ListViewItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
 
                 string name = GetMappedName(flag.Id, settings.flagMappings);
                 if (!string.IsNullOrEmpty(name))
@@ -93,7 +98,7 @@ namespace P5FlagCompare
             listView_DisabledFlags.Items.Clear();
             foreach (var flag in previousComparison.EnabledFlags.Where(x => !comparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))))
             {
-                var listItem = new DarkListItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
+                var listItem = new ListViewItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
 
                 string name = GetMappedName(flag.Id, settings.flagMappings);
                 if (!string.IsNullOrEmpty(name))
@@ -106,7 +111,7 @@ namespace P5FlagCompare
             foreach (var count in comparison.SetCounts.Where(x => !previousComparison.SetCounts.Any(y => y.Id.Equals(x.Id)) 
             || previousComparison.SetCounts.Single(y => y.Id.Equals(x.Id)).Value != x.Value))
             {
-                var listItem = new DarkListItem() { Text = $"{count.Id}: {count.Value}", Tag = count };
+                var listItem = new ListViewItem() { Text = $"{count.Id}: {count.Value}", Tag = count };
 
                 string name = GetMappedName(count.Id, settings.countMappings);
                 if (!string.IsNullOrEmpty(name))
@@ -118,7 +123,7 @@ namespace P5FlagCompare
             listView_UnsetCounts.Items.Clear();
             foreach (var count in previousComparison.SetCounts.Where(x => !comparison.SetCounts.Any(y => y.Id.Equals(x.Id))))
             {
-                var listItem = new DarkListItem() { Text = $"{count.Id}: 0", Tag = count };
+                var listItem = new ListViewItem() { Text = $"{count.Id}: 0", Tag = count };
 
                 string name = GetMappedName(count.Id, settings.countMappings);
                 if (!string.IsNullOrEmpty(name))
@@ -133,39 +138,39 @@ namespace P5FlagCompare
             if (listView_UnsetCounts.Items.Count == 0 && listView_SetCounts.Items.Count == 0
                 && listView_DisabledFlags.Items.Count == 0 && listView_EnabledFlags.Items.Count == 0)
             {
-                listView_Comparisons.Items.RemoveAt(listView_Comparisons.SelectedIndices.Last());
-                listView_Comparisons.SelectItem(listView_Comparisons.Items.Count - 1);
+                settings.comparisons.Remove((Comparison)listBox_Comparisons.SelectedItem);
+                listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
             }
         }
 
         private Comparison GetSelectedComparison()
         {
-            return (Comparison)listView_Comparisons.Items[listView_Comparisons.SelectedIndices.Last()].Tag;
+            return (Comparison)listBox_Comparisons.SelectedItem;
         }
 
         private Comparison GetPreviousComparison(int selectedIndex = -1)
         {
             Comparison previousComparison = new Comparison();
 
-            if (listView_Comparisons.SelectedIndices.Count <= 0 || listView_Comparisons.SelectedIndices.Last() == 0)
+            if (listBox_Comparisons.SelectedIndices.Count <= 0 || listBox_Comparisons.SelectedIndices[listBox_Comparisons.SelectedIndices.Count - 1] == 0)
                 return previousComparison;
 
             if (selectedIndex == -1)
-                selectedIndex = listView_Comparisons.SelectedIndices.Last();
+                selectedIndex = listBox_Comparisons.SelectedIndices[listBox_Comparisons.SelectedIndices.Count - 1];
                 
-            return (Comparison)listView_Comparisons.Items[selectedIndex - 1].Tag;
+            return (Comparison)listBox_Comparisons.SelectedItem;
         }
 
         private void Save_Click(object sender, EventArgs e)
         {
             // Replace comparisons object with only data from form
             List<Comparison> comparisons = new List<Comparison>();
-            foreach (var item in listView_Comparisons.Items)
+            foreach (ListViewItem item in listBox_Comparisons.Items)
                 comparisons.Add((Comparison)item.Tag);
             settings.comparisons = comparisons;
 
             // Get output path from file select prompt
-            var outPaths = WinFormsEvents.FilePath_Click("Save Project...", true, new string[] { "Project JSON (.json)" }, true);
+            var outPaths = WinFormsDialogs.SelectFile("Save Project...", true, new string[] { "Project JSON (.json)" }, true);
             if (outPaths == null || outPaths.Count == 0 || string.IsNullOrEmpty(outPaths.First()))
                 return;
 
@@ -185,16 +190,14 @@ namespace P5FlagCompare
 
         private void Load_Click(object sender, EventArgs e)
         {
-            var filePaths = WinFormsEvents.FilePath_Click("Load Project...", true, new string[] { "Project JSON (.json)" });
+            var filePaths = WinFormsDialogs.SelectFile("Load Project...", true, new string[] { "Project JSON (.json)" });
             if (filePaths == null || filePaths.Count == 0 || string.IsNullOrEmpty(filePaths.First()))
                 return;
 
             settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(filePaths.First()));
+            SetupListbox();
 
-            listView_Comparisons.Items.Clear();
-            foreach (var comparison in settings.comparisons)
-                listView_Comparisons.Items.Add(new DarkListItem() { Text = comparison.Name, Tag = comparison });
-            listView_Comparisons.SelectItem(listView_Comparisons.Items.Count - 1);
+            listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
 
         }
 

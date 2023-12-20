@@ -1,9 +1,13 @@
-﻿using DarkUI.Controls;
-using DarkUI.Forms;
+﻿using MetroSet_UI.Forms;
+using ShrineFox.IO;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
-namespace P5FlagCompare
+namespace P5RFlagComparer
 {
-    public partial class MainForm: DarkForm
+    public partial class MainForm: MetroSetForm
     {
         private void RenameToolStrip_Click(object sender, EventArgs e)
         {
@@ -26,7 +30,7 @@ namespace P5FlagCompare
             if (ctrlName == "listView_EnabledFlags" || ctrlName == "listView_DisabledFlags"
                 || ctrlName == "listView_SetCounts" || ctrlName == "listView_UnsetCounts")
             {
-                DarkListView listView = (DarkListView)sender;
+                ListView listView = (ListView)sender;
 
                 if (listView.SelectedIndices.Count <= 0)
                     return;
@@ -39,12 +43,12 @@ namespace P5FlagCompare
 
         private void RenameComparison()
         {
-            if (listView_Comparisons.SelectedIndices.Count <= 0)
+            if (listBox_Comparisons.SelectedIndices.Count <= 0)
                 return;
 
             var comparison = GetSelectedComparison();
             
-            RenameForm renameForm = new RenameForm(comparison.Name);
+            RenameForm renameForm = new RenameForm("Rename", comparison.Name);
             var result = renameForm.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -55,16 +59,24 @@ namespace P5FlagCompare
                 // Set unique placeholder name
                 int i = 1;
                 string name = newName;
-                while (listView_Comparisons.Items.Any(x => x.Text.Equals(name)))
+                bool nameTaken = false;
+                while (true)
                 {
-                    i++;
-                    name = newName + " " + i;
+                    foreach (ListViewItem item in listBox_Comparisons.Items)
+                    {
+                        if (item.Text == name)
+                        {
+                            i++;
+                            name = newName + " " + i;
+                            nameTaken = true;
+                        }
+                    }
+                    if (!nameTaken)
+                        break;
                 }
 
                 // Set comparison in listView to new name
                 comparison.Name = name;
-                listView_Comparisons.Items[listView_Comparisons.SelectedIndices.Last()].Tag = comparison;
-                listView_Comparisons.Items[listView_Comparisons.SelectedIndices.Last()].Text = name;
 
                 if (chk_AutoRename.Checked && name != "" && name != "Untitled")
                     RenameAllItems(name);
@@ -73,11 +85,11 @@ namespace P5FlagCompare
 
         private void RenameAllItems(string name)
         {
-            foreach (DarkListView listView in new DarkListView[] { listView_EnabledFlags, listView_DisabledFlags, listView_SetCounts, listView_UnsetCounts })
+            foreach (ListView listView in new ListView[] { listView_EnabledFlags, listView_DisabledFlags, listView_SetCounts, listView_UnsetCounts })
             {
                 bool isCount = listView.Name.Contains("Count");
 
-                foreach (var item in listView.Items)
+                foreach (ListViewItem item in listView.Items)
                 {
                     if (!item.Text.Contains("//"))
                     {
@@ -141,7 +153,7 @@ namespace P5FlagCompare
             return newName;
         }
 
-        private void RenameItems(DarkListView listView, bool isCount = false)
+        private void RenameItems(ListView listView, bool isCount = false)
         {
             if (listView.SelectedIndices.Count <= 0)
                 return;
@@ -150,8 +162,8 @@ namespace P5FlagCompare
             if (isCount)
                 mapping = settings.countMappings;
 
-            BitFlag selectedFlag = (BitFlag)listView.Items[listView.SelectedIndices.Last()].Tag;
-            RenameForm renameForm = new RenameForm(GetMappedName(selectedFlag.Id, mapping));
+            BitFlag selectedFlag = (BitFlag)listView.Items[listView.SelectedIndices[listBox_Comparisons.SelectedIndices.Count - 1]].Tag;
+            RenameForm renameForm = new RenameForm("Rename", GetMappedName(selectedFlag.Id, mapping));
             var result = renameForm.ShowDialog();
             if (result == DialogResult.OK)
             {

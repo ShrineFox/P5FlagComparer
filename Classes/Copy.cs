@@ -1,13 +1,13 @@
-﻿using DarkUI.Controls;
-using DarkUI.Forms;
+﻿using MetroSet_UI.Forms;
+using System.Windows.Forms;
 
-namespace P5FlagCompare
+namespace P5RFlagComparer
 {
-    public partial class MainForm: DarkForm
+    public partial class MainForm: MetroSetForm
     {
         private void CopyAllToClipboard()
         {
-            if (listView_Comparisons.SelectedIndices.Count <= 0)
+            if (listBox_Comparisons.SelectedIndices.Count <= 0)
                 return;
 
             Comparison comparison = GetSelectedComparison();
@@ -55,18 +55,18 @@ namespace P5FlagCompare
             if (ctrlName == "listView_EnabledFlags" || ctrlName == "listView_DisabledFlags"
                 || ctrlName == "listView_SetCounts" || ctrlName == "listView_UnsetCounts")
             {
-                DarkListView listView = (DarkListView)sender;
+                ListView listView = (ListView)sender;
 
                 if (listView.SelectedIndices.Count <= 0)
                     return;
 
-                CopyItems(new DarkListView[] { listView });
+                CopyItems(new ListView[] { listView });
             }
             else
-                CopyItems(new DarkListView[] { listView_EnabledFlags, listView_DisabledFlags, listView_SetCounts, listView_UnsetCounts });
+                CopyItems(new ListView[] { listView_EnabledFlags, listView_DisabledFlags, listView_SetCounts, listView_UnsetCounts });
         }
 
-        private void CopyItems(DarkListView[] listViews)
+        private void CopyItems(ListView[] listViews)
         {
             string clipboardText = "";
 
@@ -76,7 +76,7 @@ namespace P5FlagCompare
                     return;
 
                 bool isCount = listView.Name.Contains("Count");
-                foreach (var index in listView.SelectedIndices)
+                foreach (int index in listView.SelectedIndices)
                 {
                     BitFlag bitFlag = (BitFlag)listView.Items[index].Tag;
 

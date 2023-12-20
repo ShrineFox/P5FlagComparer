@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace P5FlagCompare
+namespace P5RFlagComparer
 {
     // Adapted from Lipsum
     public class Flag

@@ -1,10 +1,13 @@
-﻿using DarkUI.Controls;
-using DarkUI.Forms;
+﻿using MetroSet_UI.Forms;
 using ShrineFox.IO;
+using System;
+using System.Linq;
+using System.Net.Http.Headers;
+using System.Windows.Forms;
 
-namespace P5FlagCompare
+namespace P5RFlagComparer
 {
-    public partial class MainForm: DarkForm
+    public partial class MainForm: MetroSetForm
     {
         private void CompareFromClipboard()
         {
@@ -64,20 +67,19 @@ namespace P5FlagCompare
                 comparison.Name = name + i;
             }
 
-            // Add to comparison list and update form
+            // Add to comparison list
             settings.comparisons.Add(comparison);
-            listView_Comparisons.Items.Add(new DarkListItem() { Text = comparison.Name, Tag = comparison });
-            listView_Comparisons.SelectItem(listView_Comparisons.Items.Count - 1);
         }
+
 
         private void RemoveComparison()
         {
-            if (listView_Comparisons.SelectedIndices.Count <= 0)
+            if (listBox_Comparisons.SelectedIndices.Count <= 0)
                 return;
 
-            if (WinFormsDialogs.YesNoMsgBox("Remove Comparison?",
-                "Would you like to remove the currently selected comparison from the list?", MessageBoxIcon.Question))
-                    listView_Comparisons.Items.RemoveAt(listView_Comparisons.SelectedIndices.Last());
+            if (WinFormsDialogs.ShowMessageBox("Remove Comparison?",
+                "Would you like to remove the currently selected comparison from the list?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                settings.comparisons.RemoveAt(listBox_Comparisons.SelectedIndex);
         }
     }
 }
