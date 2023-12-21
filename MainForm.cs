@@ -1,10 +1,16 @@
+using MetroSet_UI.Forms;
+using ShrineFox.IO;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Reflection;
-using DarkUI.Controls;
-using DarkUI.Forms;
+using System.Windows.Forms;
 
-namespace P5FlagCompare
+namespace P5RFlagComparer
 {
-    public partial class MainForm : DarkForm
+    public partial class MainForm : MetroSetForm
     {
         Settings settings = new Settings();
         public class Settings
@@ -33,59 +39,24 @@ namespace P5FlagCompare
         public MainForm()
         {
             InitializeComponent();
-            SetMenuStripIcons();
+            Theme.ApplyToForm(this);
+            MenuStripHelper.SetMenuStripIcons(MenuStripHelper.GetMenuStripIconPairs("icons.txt"), this);
+
+            SetupListbox();
         }
 
-        private void SetMenuStripIcons()
+        private void SetupListbox()
         {
-            List<Tuple<string, string>> menuStripIcons = new List<Tuple<string, string>>() {
-                new Tuple<string, string>("fileToolStripMenuItem", "disk"),
-                new Tuple<string, string>("loadToolStripMenuItem", "folder_page"),
-                new Tuple<string, string>("saveToolStripMenuItem", "disk_multiple"),
-                new Tuple<string, string>("pasteFlagsToolStripMenuItem", "paste_plain"),
-                new Tuple<string, string>("deleteToolStripMenuItem", "delete"),
-                new Tuple<string, string>("renameToolStripMenuItem", "textfield_rename"),
-                new Tuple<string, string>("copyToolStripMenuItem", "page_copy"),
-                new Tuple<string, string>("copyAllToolStripMenuItem", "page_white_stack"),
-            };
+            int selectedIndex = listBox_Comparisons.SelectedIndex;
 
-            // Context Menu Strips
-            foreach (DarkContextMenu menuStrip in new DarkContextMenu[] { darkContextMenu_RightClick })
-                ApplyIconsFromList(menuStrip.Items, menuStripIcons);
-
-            // Menu Strip Items
-            foreach (DarkMenuStrip menuStrip in this.FlattenChildren<DarkMenuStrip>())
-                ApplyIconsFromList(menuStrip.Items, menuStripIcons);
-        }
-
-        private void ApplyIconsFromList(ToolStripItemCollection items, List<Tuple<string, string>> menuStripIcons)
-        {
-            foreach (ToolStripMenuItem tsmi in items)
-            {
-                // Apply context menu icon
-                if (menuStripIcons.Any(x => x.Item1 == tsmi.Name))
-                    ApplyIconFromFile(tsmi, menuStripIcons);
-                // Apply drop down menu icon
-                foreach (ToolStripMenuItem tsmi2 in tsmi.DropDownItems)
-                    if (menuStripIcons.Any(x => x.Item1 == tsmi2.Name))
-                        ApplyIconFromFile(tsmi2, menuStripIcons);
-            }
-        }
-
-        private void ApplyIconFromFile(ToolStripMenuItem tsmi, List<Tuple<string, string>> menuStripIcons)
-        {
-            tsmi.Image = Image.FromFile(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                        $"Icons\\{menuStripIcons.Single(x => x.Item1 == tsmi.Name).Item2}.png"));
-        }
-
-        private void CopyAll_Click(object sender, EventArgs e)
-        {
-            CopyAllToClipboard();
-        }
-
-        private void Copy_Click(object sender, EventArgs e)
-        {
-            CopyToClipboard(sender);
+            BindingSource bs = new BindingSource();
+            bs.DataSource = settings.comparisons;
+            listBox_Comparisons.DataSource = bs;
+            listBox_Comparisons.DisplayMember = "Name";
+            listBox_Comparisons.ValueMember = "Name";
+            
+            if (listBox_Comparisons.Items.Count - 1 >= selectedIndex)
+                listBox_Comparisons.SelectedIndex = selectedIndex;
         }
     }
 

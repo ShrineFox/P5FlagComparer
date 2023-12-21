@@ -1,0 +1,9 @@
+fileToolStripMenuItem disk
+loadToolStripMenuItem folder_page
+saveToolStripMenuItem disk_multiple
+pasteFlagsToolStripMenuItem paste_plain
+deleteToolStripMenuItem delete
+renameToolStripMenuItem textfield_rename
+copyToolStripMenuItem page_copy
+copyAllToolStripMenuItem page_white_stack
+toggleThemeToolStripMenuItem weather_cloudy
