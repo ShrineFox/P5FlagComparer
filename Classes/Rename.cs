@@ -80,6 +80,8 @@ namespace P5RFlagComparer
 
                 if (chk_AutoRename.Checked && name != "" && name != "Untitled")
                     RenameAllItems(name);
+
+                SetupListbox();
             }
         }
 
@@ -167,8 +169,8 @@ namespace P5RFlagComparer
                     BitFlag flag = (BitFlag)listBox.Items[index];
                     string name = SetNewName(newName, flag.Id, isCount);
                 }
+                SetupListbox();
             }
-            SetupListbox();
         }
 
         private string GetFormattedFlag(int flagId)

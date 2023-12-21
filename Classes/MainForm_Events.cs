@@ -215,5 +215,25 @@ namespace P5RFlagComparer
         {
             CompareFromClipboard();
         }
+
+        private void CopyAll_Click(object sender, EventArgs e)
+        {
+            CopyAllToClipboard();
+        }
+
+        private void Copy_Click(object sender, EventArgs e)
+        {
+            CopyToClipboard(sender);
+        }
+
+        private void ToggleTheme_Click(object sender, EventArgs e)
+        {
+            if (Theme.ThemeStyle == MetroSet_UI.Enums.Style.Dark)
+                Theme.ThemeStyle = MetroSet_UI.Enums.Style.Light;
+            else
+                Theme.ThemeStyle = MetroSet_UI.Enums.Style.Dark;
+
+            Theme.ApplyToForm(this);
+        }
     }
 }

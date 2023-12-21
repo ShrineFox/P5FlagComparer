@@ -47,21 +47,16 @@ namespace P5RFlagComparer
 
         private void SetupListbox()
         {
+            int selectedIndex = listBox_Comparisons.SelectedIndex;
+
             BindingSource bs = new BindingSource();
             bs.DataSource = settings.comparisons;
             listBox_Comparisons.DataSource = bs;
             listBox_Comparisons.DisplayMember = "Name";
             listBox_Comparisons.ValueMember = "Name";
-        }
-
-        private void CopyAll_Click(object sender, EventArgs e)
-        {
-            CopyAllToClipboard();
-        }
-
-        private void Copy_Click(object sender, EventArgs e)
-        {
-            CopyToClipboard(sender);
+            
+            if (listBox_Comparisons.Items.Count - 1 >= selectedIndex)
+                listBox_Comparisons.SelectedIndex = selectedIndex;
         }
     }
 

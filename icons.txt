@@ -6,3 +6,4 @@ deleteToolStripMenuItem delete
 renameToolStripMenuItem textfield_rename
 copyToolStripMenuItem page_copy
 copyAllToolStripMenuItem page_white_stack
+toggleThemeToolStripMenuItem weather_cloudy

@@ -62,6 +62,7 @@ namespace P5RFlagComparer
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteFlagsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toggleThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox_Comparisons = new System.Windows.Forms.ListBox();
             this.tlp_Main.SuspendLayout();
@@ -104,13 +105,13 @@ namespace P5RFlagComparer
             this.metroSetTabControl_FlagType.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.metroSetTabControl_FlagType.Controls.Add(this.tabPage_BitFlags);
             this.metroSetTabControl_FlagType.Controls.Add(this.tabPage_Count);
-            this.metroSetTabControl_FlagType.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.metroSetTabControl_FlagType.Cursor = System.Windows.Forms.Cursors.Default;
             this.metroSetTabControl_FlagType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroSetTabControl_FlagType.IsDerivedStyle = false;
             this.metroSetTabControl_FlagType.ItemSize = new System.Drawing.Size(100, 38);
             this.metroSetTabControl_FlagType.Location = new System.Drawing.Point(3, 3);
             this.metroSetTabControl_FlagType.Name = "metroSetTabControl_FlagType";
-            this.metroSetTabControl_FlagType.SelectedIndex = 0;
+            this.metroSetTabControl_FlagType.SelectedIndex = 1;
             this.metroSetTabControl_FlagType.SelectedTextColor = System.Drawing.Color.White;
             this.metroSetTabControl_FlagType.Size = new System.Drawing.Size(454, 393);
             this.metroSetTabControl_FlagType.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
@@ -176,6 +177,7 @@ namespace P5RFlagComparer
             this.listBox_DisabledFlags.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_DisabledFlags.Size = new System.Drawing.Size(446, 155);
             this.listBox_DisabledFlags.TabIndex = 1;
+            this.listBox_DisabledFlags.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             // 
             // groupBox_NewEnabled
             // 
@@ -203,6 +205,7 @@ namespace P5RFlagComparer
             this.listBox_EnabledFlags.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_EnabledFlags.Size = new System.Drawing.Size(446, 154);
             this.listBox_EnabledFlags.TabIndex = 0;
+            this.listBox_EnabledFlags.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             // 
             // tabPage_Count
             // 
@@ -258,6 +261,7 @@ namespace P5RFlagComparer
             this.listBox_UnsetCounts.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_UnsetCounts.Size = new System.Drawing.Size(446, 155);
             this.listBox_UnsetCounts.TabIndex = 1;
+            this.listBox_UnsetCounts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             // 
             // groupBox_NewCount
             // 
@@ -285,6 +289,7 @@ namespace P5RFlagComparer
             this.listBox_SetCounts.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_SetCounts.Size = new System.Drawing.Size(446, 154);
             this.listBox_SetCounts.TabIndex = 0;
+            this.listBox_SetCounts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             // 
             // tlp_Checkboxes
             // 
@@ -326,6 +331,7 @@ namespace P5RFlagComparer
             this.chkBox_Sections.Size = new System.Drawing.Size(96, 26);
             this.chkBox_Sections.TabIndex = 4;
             this.chkBox_Sections.Text = "Sections";
+            this.chkBox_Sections.CheckedChanged += new System.EventHandler(this.Sections_CheckedChanged);
             // 
             // lbl_TimeStamp
             // 
@@ -382,7 +388,8 @@ namespace P5RFlagComparer
             this.menuStrip_Main.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.pasteFlagsToolStripMenuItem});
+            this.pasteFlagsToolStripMenuItem,
+            this.toggleThemeToolStripMenuItem});
             this.menuStrip_Main.Location = new System.Drawing.Point(2, 0);
             this.menuStrip_Main.Name = "menuStrip_Main";
             this.menuStrip_Main.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
@@ -425,6 +432,13 @@ namespace P5RFlagComparer
             this.pasteFlagsToolStripMenuItem.Text = "Paste Flags";
             this.pasteFlagsToolStripMenuItem.Click += new System.EventHandler(this.PasteFlags_Click);
             // 
+            // toggleThemeToolStripMenuItem
+            // 
+            this.toggleThemeToolStripMenuItem.Name = "toggleThemeToolStripMenuItem";
+            this.toggleThemeToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
+            this.toggleThemeToolStripMenuItem.Text = "Toggle Theme";
+            this.toggleThemeToolStripMenuItem.Click += new System.EventHandler(this.ToggleTheme_Click);
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -454,6 +468,7 @@ namespace P5RFlagComparer
             this.listBox_Comparisons.Size = new System.Drawing.Size(232, 470);
             this.listBox_Comparisons.TabIndex = 0;
             this.listBox_Comparisons.SelectedIndexChanged += new System.EventHandler(this.SelectedComparison_Changed);
+            this.listBox_Comparisons.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             // 
             // MainForm
             // 
@@ -478,6 +493,7 @@ namespace P5RFlagComparer
             this.Text = "P5FlagComparer";
             this.TextColor = System.Drawing.Color.White;
             this.ThemeName = "MetroDark";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             this.tlp_Main.ResumeLayout(false);
             this.metroSetTabControl_FlagType.ResumeLayout(false);
             this.tabPage_BitFlags.ResumeLayout(false);
@@ -534,5 +550,6 @@ namespace P5RFlagComparer
         private GroupBox groupBox_NewCount;
         private ListBox listBox_SetCounts;
         private Label lbl_TimeStamp;
+        private ToolStripMenuItem toggleThemeToolStripMenuItem;
     }
 }
