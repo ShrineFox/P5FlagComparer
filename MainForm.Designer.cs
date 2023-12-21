@@ -170,8 +170,10 @@ namespace P5RFlagComparer
             this.listBox_DisabledFlags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.listBox_DisabledFlags.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox_DisabledFlags.ForeColor = System.Drawing.Color.Silver;
+            this.listBox_DisabledFlags.ItemHeight = 20;
             this.listBox_DisabledFlags.Location = new System.Drawing.Point(0, 19);
             this.listBox_DisabledFlags.Name = "listBox_DisabledFlags";
+            this.listBox_DisabledFlags.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_DisabledFlags.Size = new System.Drawing.Size(446, 155);
             this.listBox_DisabledFlags.TabIndex = 1;
             // 
@@ -195,8 +197,10 @@ namespace P5RFlagComparer
             this.listBox_EnabledFlags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(73)))), ((int)(((byte)(65)))));
             this.listBox_EnabledFlags.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox_EnabledFlags.ForeColor = System.Drawing.Color.Silver;
+            this.listBox_EnabledFlags.ItemHeight = 20;
             this.listBox_EnabledFlags.Location = new System.Drawing.Point(0, 19);
             this.listBox_EnabledFlags.Name = "listBox_EnabledFlags";
+            this.listBox_EnabledFlags.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_EnabledFlags.Size = new System.Drawing.Size(446, 154);
             this.listBox_EnabledFlags.TabIndex = 0;
             // 
@@ -233,6 +237,7 @@ namespace P5RFlagComparer
             // 
             this.groupBox_UnsetCount.Controls.Add(this.listBox_UnsetCounts);
             this.groupBox_UnsetCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox_UnsetCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.groupBox_UnsetCount.Location = new System.Drawing.Point(0, 173);
             this.groupBox_UnsetCount.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox_UnsetCount.Name = "groupBox_UnsetCount";
@@ -247,9 +252,11 @@ namespace P5RFlagComparer
             this.listBox_UnsetCounts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.listBox_UnsetCounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox_UnsetCounts.ForeColor = System.Drawing.Color.Silver;
-            this.listBox_UnsetCounts.Location = new System.Drawing.Point(0, 25);
+            this.listBox_UnsetCounts.ItemHeight = 20;
+            this.listBox_UnsetCounts.Location = new System.Drawing.Point(0, 19);
             this.listBox_UnsetCounts.Name = "listBox_UnsetCounts";
-            this.listBox_UnsetCounts.Size = new System.Drawing.Size(446, 149);
+            this.listBox_UnsetCounts.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBox_UnsetCounts.Size = new System.Drawing.Size(446, 155);
             this.listBox_UnsetCounts.TabIndex = 1;
             // 
             // groupBox_NewCount
@@ -257,6 +264,7 @@ namespace P5RFlagComparer
             this.groupBox_NewCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
             this.groupBox_NewCount.Controls.Add(this.listBox_SetCounts);
             this.groupBox_NewCount.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox_NewCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.groupBox_NewCount.Location = new System.Drawing.Point(0, 0);
             this.groupBox_NewCount.Margin = new System.Windows.Forms.Padding(0);
             this.groupBox_NewCount.Name = "groupBox_NewCount";
@@ -271,16 +279,18 @@ namespace P5RFlagComparer
             this.listBox_SetCounts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(73)))), ((int)(((byte)(65)))));
             this.listBox_SetCounts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox_SetCounts.ForeColor = System.Drawing.Color.Silver;
-            this.listBox_SetCounts.Location = new System.Drawing.Point(0, 25);
+            this.listBox_SetCounts.ItemHeight = 20;
+            this.listBox_SetCounts.Location = new System.Drawing.Point(0, 19);
             this.listBox_SetCounts.Name = "listBox_SetCounts";
-            this.listBox_SetCounts.Size = new System.Drawing.Size(446, 148);
+            this.listBox_SetCounts.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listBox_SetCounts.Size = new System.Drawing.Size(446, 154);
             this.listBox_SetCounts.TabIndex = 0;
             // 
             // tlp_Checkboxes
             // 
             this.tlp_Checkboxes.ColumnCount = 2;
-            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 264F));
+            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlp_Checkboxes.Controls.Add(this.chk_AutoRename, 1, 0);
             this.tlp_Checkboxes.Controls.Add(this.chkBox_Sections, 0, 0);
             this.tlp_Checkboxes.Controls.Add(this.lbl_TimeStamp, 0, 1);
@@ -288,8 +298,8 @@ namespace P5RFlagComparer
             this.tlp_Checkboxes.Location = new System.Drawing.Point(3, 402);
             this.tlp_Checkboxes.Name = "tlp_Checkboxes";
             this.tlp_Checkboxes.RowCount = 2;
-            this.tlp_Checkboxes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tlp_Checkboxes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlp_Checkboxes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tlp_Checkboxes.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tlp_Checkboxes.Size = new System.Drawing.Size(454, 65);
             this.tlp_Checkboxes.TabIndex = 4;
             // 
@@ -297,9 +307,10 @@ namespace P5RFlagComparer
             // 
             this.chk_AutoRename.AutoSize = true;
             this.chk_AutoRename.Dock = System.Windows.Forms.DockStyle.Left;
-            this.chk_AutoRename.Location = new System.Drawing.Point(193, 3);
+            this.chk_AutoRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.chk_AutoRename.Location = new System.Drawing.Point(230, 3);
             this.chk_AutoRename.Name = "chk_AutoRename";
-            this.chk_AutoRename.Size = new System.Drawing.Size(169, 39);
+            this.chk_AutoRename.Size = new System.Drawing.Size(133, 26);
             this.chk_AutoRename.TabIndex = 6;
             this.chk_AutoRename.Text = "Auto-Rename";
             // 
@@ -309,9 +320,10 @@ namespace P5RFlagComparer
             this.chkBox_Sections.Checked = true;
             this.chkBox_Sections.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkBox_Sections.Dock = System.Windows.Forms.DockStyle.Left;
+            this.chkBox_Sections.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.chkBox_Sections.Location = new System.Drawing.Point(3, 3);
             this.chkBox_Sections.Name = "chkBox_Sections";
-            this.chkBox_Sections.Size = new System.Drawing.Size(118, 39);
+            this.chkBox_Sections.Size = new System.Drawing.Size(96, 26);
             this.chkBox_Sections.TabIndex = 4;
             this.chkBox_Sections.Text = "Sections";
             // 
@@ -319,7 +331,8 @@ namespace P5RFlagComparer
             // 
             this.lbl_TimeStamp.AutoSize = true;
             this.tlp_Checkboxes.SetColumnSpan(this.lbl_TimeStamp, 2);
-            this.lbl_TimeStamp.Location = new System.Drawing.Point(3, 45);
+            this.lbl_TimeStamp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.lbl_TimeStamp.Location = new System.Drawing.Point(3, 32);
             this.lbl_TimeStamp.Name = "lbl_TimeStamp";
             this.lbl_TimeStamp.Size = new System.Drawing.Size(0, 20);
             this.lbl_TimeStamp.TabIndex = 7;
@@ -433,12 +446,11 @@ namespace P5RFlagComparer
             // 
             this.listBox_Comparisons.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listBox_Comparisons.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBox_Comparisons.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F);
+            this.listBox_Comparisons.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.listBox_Comparisons.FormattingEnabled = true;
-            this.listBox_Comparisons.ItemHeight = 22;
+            this.listBox_Comparisons.ItemHeight = 20;
             this.listBox_Comparisons.Location = new System.Drawing.Point(0, 0);
             this.listBox_Comparisons.Name = "listBox_Comparisons";
-            this.listBox_Comparisons.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_Comparisons.Size = new System.Drawing.Size(232, 470);
             this.listBox_Comparisons.TabIndex = 0;
             this.listBox_Comparisons.SelectedIndexChanged += new System.EventHandler(this.SelectedComparison_Changed);

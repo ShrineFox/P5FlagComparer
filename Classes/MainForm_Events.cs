@@ -72,7 +72,6 @@ namespace P5RFlagComparer
 
             // If previous comparison has any flag Ids enabled that the latest comparison doesn't, add to listBox
             UpdateNewlyEnabledFlagsList(comparison, previousComparison);
-
             // If previous comparison has any flag Ids disabled that the latest comparison doesn't, add to listBox
             UpdateNewlyDisabledFlagsList(comparison, previousComparison);
             // If previous comparison has any count Ids set that the latest comparison doesn't, add to listBox
@@ -95,7 +94,7 @@ namespace P5RFlagComparer
         private void UpdateNewlyEnabledFlagsList(Comparison comparison, Comparison previousComparison)
         {
             BindingSource bs_newlyEnabledFlags = new BindingSource();
-            bs_newlyEnabledFlags.DataSource = comparison.EnabledFlags.Where(x => !previousComparison.EnabledFlags.Any(y => y.Id.Equals(x.Id)));
+            bs_newlyEnabledFlags.DataSource = comparison.EnabledFlags.Where(x => !previousComparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))).ToList();
             listBox_EnabledFlags.DataSource = bs_newlyEnabledFlags;
             listBox_EnabledFlags.FormattingEnabled = true;
             listBox_EnabledFlags.Format += FlagFormat;
@@ -104,7 +103,7 @@ namespace P5RFlagComparer
         private void UpdateNewlyDisabledFlagsList(Comparison comparison, Comparison previousComparison)
         {
             BindingSource bs_newlyDisabledFlags = new BindingSource();
-            bs_newlyDisabledFlags.DataSource = previousComparison.EnabledFlags.Where(x => !comparison.EnabledFlags.Any(y => y.Id.Equals(x.Id)));
+            bs_newlyDisabledFlags.DataSource = previousComparison.EnabledFlags.Where(x => !comparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))).ToList();
             listBox_DisabledFlags.DataSource = bs_newlyDisabledFlags;
             listBox_DisabledFlags.FormattingEnabled = true;
             listBox_DisabledFlags.Format += FlagFormat;
@@ -114,7 +113,7 @@ namespace P5RFlagComparer
         {
             BindingSource bs_newlySetCounts = new BindingSource();
             bs_newlySetCounts.DataSource = comparison.SetCounts.Where(x => !previousComparison.SetCounts.Any(y => y.Id.Equals(x.Id))
-            || previousComparison.SetCounts.Single(y => y.Id.Equals(x.Id)).Value != x.Value);
+            || previousComparison.SetCounts.Single(y => y.Id.Equals(x.Id)).Value != x.Value).ToList();
             listBox_SetCounts.DataSource = bs_newlySetCounts;
             listBox_SetCounts.FormattingEnabled = true;
             listBox_SetCounts.Format += CountFormat;
@@ -123,7 +122,7 @@ namespace P5RFlagComparer
         private void UpdateNewlyUnsetCountsList(Comparison comparison, Comparison previousComparison)
         {
             BindingSource bs_newlyUnsetCounts = new BindingSource();
-            bs_newlyUnsetCounts.DataSource = previousComparison.SetCounts.Where(x => !comparison.SetCounts.Any(y => y.Id.Equals(x.Id)));
+            bs_newlyUnsetCounts.DataSource = previousComparison.SetCounts.Where(x => !comparison.SetCounts.Any(y => y.Id.Equals(x.Id))).ToList();
             listBox_UnsetCounts.DataSource = bs_newlyUnsetCounts;
             listBox_UnsetCounts.FormattingEnabled = true;
             listBox_UnsetCounts.Format += CountFormat;
@@ -136,7 +135,7 @@ namespace P5RFlagComparer
             e.Value = $"{flag.Id}: {flag.Value}";
             if (!string.IsNullOrEmpty(flag.Name))
             {
-                e.Value += $" // {flag.Name}";
+                e.Value += $" // {GetMappedName(flag.Id, settings.countMappings)}";
             }
         }
 
@@ -147,7 +146,7 @@ namespace P5RFlagComparer
             e.Value = GetFormattedFlag(flag.Id);
             if (!string.IsNullOrEmpty(flag.Name))
             {
-                e.Value += $" // {flag.Name}";
+                e.Value += $" // {GetMappedName(flag.Id, settings.flagMappings)}";
             }
         }
 
@@ -156,17 +155,14 @@ namespace P5RFlagComparer
             return (Comparison)listBox_Comparisons.SelectedItem;
         }
 
-        private Comparison GetPreviousComparison(int selectedIndex = -1)
+        private Comparison GetPreviousComparison()
         {
             Comparison previousComparison = new Comparison();
 
-            if (listBox_Comparisons.SelectedIndices.Count <= 0 || listBox_Comparisons.SelectedIndices[listBox_Comparisons.SelectedIndices.Count - 1] == 0)
+            if (listBox_Comparisons.Items.Count <= 0 || listBox_Comparisons.SelectedIndex <= 0)
                 return previousComparison;
 
-            if (selectedIndex == -1)
-                selectedIndex = listBox_Comparisons.SelectedIndices[listBox_Comparisons.SelectedIndices.Count - 1];
-                
-            return (Comparison)listBox_Comparisons.SelectedItem;
+            return (Comparison)listBox_Comparisons.Items[listBox_Comparisons.SelectedIndex - 1];
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -205,7 +201,8 @@ namespace P5RFlagComparer
             settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(filePaths.First()));
             SetupListbox();
 
-            listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
+            if (listBox_Comparisons.Items.Count > 1)
+                listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
 
         }
 
