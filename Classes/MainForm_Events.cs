@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static P5RFlagComparer.MainForm;
 
 namespace P5RFlagComparer
 {
@@ -34,45 +35,32 @@ namespace P5RFlagComparer
         private void SelectAll(object sender)
         {
             string ctrlName = ((Control)sender).Name;
-            if (ctrlName == "listView_EnabledFlags" || ctrlName == "listView_DisabledFlags"
-                || ctrlName == "listView_SetCounts" || ctrlName == "listView_UnsetCounts")
+            if (ctrlName == "listBox_EnabledFlags" || ctrlName == "listBox_DisabledFlags"
+                || ctrlName == "listBox_SetCounts" || ctrlName == "listBox_UnsetCounts")
             {
-                ListView listView = (ListView)sender;
+                ListBox listBox = (ListBox)sender;
                 List<int> indexes = new List<int>();
-                for (int i = 0; i < listView.Items.Count; i++)
+                for (int i = 0; i < listBox.Items.Count; i++)
                     indexes.Add(i);
                 if (indexes.Count > 0)
                     foreach (var index in indexes)
-                        listView.Items[index].Selected = true;
+                        listBox.SelectedItems.Add(listBox.Items[index]);
             }
         }
 
         private void Sections_CheckedChanged(object sender, EventArgs e)
         {
-            // Update names of items in listViews depending on whether flag sections are enabled
-            foreach (var listView in new ListView[] { listView_EnabledFlags, listView_DisabledFlags })
-            {
-                foreach (ListViewItem item in listView.Items)
-                {
-                    BitFlag bitFlag = (BitFlag)item.Tag;
-                    item.Text = GetFormattedFlag(bitFlag.Id);
-
-                    string name = GetMappedName(bitFlag.Id, settings.flagMappings);
-                    if (!string.IsNullOrEmpty(name))
-                        item.Text += $" // {name}";
-                }
-            }
-            
+            UpdateListBoxes();
         }
 
         private void SelectedComparison_Changed(object sender, EventArgs e)
         {
-            UpdateListViews();
+            UpdateListBoxes();
         }
 
-        private void UpdateListViews()
+        private void UpdateListBoxes()
         {
-            // Compare flags/counts between selected comparison and previous and update listViews
+            // Compare flags/counts between selected comparison and previous and update listBoxs
             if (listBox_Comparisons.SelectedIndices.Count <= 0)
                 return;
 
@@ -82,64 +70,84 @@ namespace P5RFlagComparer
             // Get previous comparison if one exists
             Comparison previousComparison = GetPreviousComparison();
 
-            // If previous comparison has any flag Ids enabled that the latest comparison doesn't, add to listView
-            listView_EnabledFlags.Items.Clear();
-            foreach (var flag in comparison.EnabledFlags.Where(x => !previousComparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))))
-            {
-                var listItem = new ListViewItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
+            // If previous comparison has any flag Ids enabled that the latest comparison doesn't, add to listBox
+            UpdateNewlyEnabledFlagsList(comparison, previousComparison);
 
-                string name = GetMappedName(flag.Id, settings.flagMappings);
-                if (!string.IsNullOrEmpty(name))
-                    listItem.Text += $" // {name}";
+            // If previous comparison has any flag Ids disabled that the latest comparison doesn't, add to listBox
+            UpdateNewlyDisabledFlagsList(comparison, previousComparison);
+            // If previous comparison has any count Ids set that the latest comparison doesn't, add to listBox
+            UpdateNewlySetCountsList(comparison, previousComparison);
+            // If previous comparison has any count Ids unset that the latest comparison doesn't, add to listBox
+            UpdateNewlyUnsetCountsList(comparison, previousComparison);
 
-                listView_EnabledFlags.Items.Add(listItem);
-            }
-            // If previous comparison has any flag Ids disabled that the latest comparison doesn't, add to listView
-            listView_DisabledFlags.Items.Clear();
-            foreach (var flag in previousComparison.EnabledFlags.Where(x => !comparison.EnabledFlags.Any(y => y.Id.Equals(x.Id))))
-            {
-                var listItem = new ListViewItem() { Text = GetFormattedFlag(flag.Id), Tag = flag };
-
-                string name = GetMappedName(flag.Id, settings.flagMappings);
-                if (!string.IsNullOrEmpty(name))
-                    listItem.Text += $" // {name}";
-
-                listView_DisabledFlags.Items.Add(listItem);
-            }
-            // If previous comparison has any count Ids set that the latest comparison doesn't, add to listView
-            listView_SetCounts.Items.Clear();
-            foreach (var count in comparison.SetCounts.Where(x => !previousComparison.SetCounts.Any(y => y.Id.Equals(x.Id)) 
-            || previousComparison.SetCounts.Single(y => y.Id.Equals(x.Id)).Value != x.Value))
-            {
-                var listItem = new ListViewItem() { Text = $"{count.Id}: {count.Value}", Tag = count };
-
-                string name = GetMappedName(count.Id, settings.countMappings);
-                if (!string.IsNullOrEmpty(name))
-                    listItem.Text += $" // {name}";
-
-                listView_SetCounts.Items.Add(listItem);
-            }
-            // If previous comparison has any count Ids unset that the latest comparison doesn't, add to listView
-            listView_UnsetCounts.Items.Clear();
-            foreach (var count in previousComparison.SetCounts.Where(x => !comparison.SetCounts.Any(y => y.Id.Equals(x.Id))))
-            {
-                var listItem = new ListViewItem() { Text = $"{count.Id}: 0", Tag = count };
-
-                string name = GetMappedName(count.Id, settings.countMappings);
-                if (!string.IsNullOrEmpty(name))
-                    listItem.Text += $" // {name}";
-
-                listView_UnsetCounts.Items.Add(listItem);
-            }
             // Update timestamp
             lbl_TimeStamp.Text = comparison.TimeStamp;
 
-            // Remove current comparison and select latest if all listViews are empty
-            if (listView_UnsetCounts.Items.Count == 0 && listView_SetCounts.Items.Count == 0
-                && listView_DisabledFlags.Items.Count == 0 && listView_EnabledFlags.Items.Count == 0)
+            // Remove current comparison and select latest if all listBoxs are empty
+            if (listBox_UnsetCounts.Items.Count == 0 && listBox_SetCounts.Items.Count == 0
+                && listBox_DisabledFlags.Items.Count == 0 && listBox_EnabledFlags.Items.Count == 0)
             {
                 settings.comparisons.Remove((Comparison)listBox_Comparisons.SelectedItem);
                 listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
+            }
+        }
+
+        private void UpdateNewlyEnabledFlagsList(Comparison comparison, Comparison previousComparison)
+        {
+            BindingSource bs_newlyEnabledFlags = new BindingSource();
+            bs_newlyEnabledFlags.DataSource = comparison.EnabledFlags.Where(x => !previousComparison.EnabledFlags.Any(y => y.Id.Equals(x.Id)));
+            listBox_EnabledFlags.DataSource = bs_newlyEnabledFlags;
+            listBox_EnabledFlags.FormattingEnabled = true;
+            listBox_EnabledFlags.Format += FlagFormat;
+        }
+
+        private void UpdateNewlyDisabledFlagsList(Comparison comparison, Comparison previousComparison)
+        {
+            BindingSource bs_newlyDisabledFlags = new BindingSource();
+            bs_newlyDisabledFlags.DataSource = previousComparison.EnabledFlags.Where(x => !comparison.EnabledFlags.Any(y => y.Id.Equals(x.Id)));
+            listBox_DisabledFlags.DataSource = bs_newlyDisabledFlags;
+            listBox_DisabledFlags.FormattingEnabled = true;
+            listBox_DisabledFlags.Format += FlagFormat;
+        }
+
+        private void UpdateNewlySetCountsList(Comparison comparison, Comparison previousComparison)
+        {
+            BindingSource bs_newlySetCounts = new BindingSource();
+            bs_newlySetCounts.DataSource = comparison.SetCounts.Where(x => !previousComparison.SetCounts.Any(y => y.Id.Equals(x.Id))
+            || previousComparison.SetCounts.Single(y => y.Id.Equals(x.Id)).Value != x.Value);
+            listBox_SetCounts.DataSource = bs_newlySetCounts;
+            listBox_SetCounts.FormattingEnabled = true;
+            listBox_SetCounts.Format += CountFormat;
+        }
+
+        private void UpdateNewlyUnsetCountsList(Comparison comparison, Comparison previousComparison)
+        {
+            BindingSource bs_newlyUnsetCounts = new BindingSource();
+            bs_newlyUnsetCounts.DataSource = previousComparison.SetCounts.Where(x => !comparison.SetCounts.Any(y => y.Id.Equals(x.Id)));
+            listBox_UnsetCounts.DataSource = bs_newlyUnsetCounts;
+            listBox_UnsetCounts.FormattingEnabled = true;
+            listBox_UnsetCounts.Format += CountFormat;
+        }
+
+        private void CountFormat(object sender, ListControlConvertEventArgs e)
+        {
+            var flag = (BitFlag)e.ListItem;
+
+            e.Value = $"{flag.Id}: {flag.Value}";
+            if (!string.IsNullOrEmpty(flag.Name))
+            {
+                e.Value += $" // {flag.Name}";
+            }
+        }
+
+        private void FlagFormat(object sender, ListControlConvertEventArgs e)
+        {
+            var flag = (BitFlag)e.ListItem;
+
+            e.Value = GetFormattedFlag(flag.Id);
+            if (!string.IsNullOrEmpty(flag.Name))
+            {
+                e.Value += $" // {flag.Name}";
             }
         }
 
@@ -165,8 +173,8 @@ namespace P5RFlagComparer
         {
             // Replace comparisons object with only data from form
             List<Comparison> comparisons = new List<Comparison>();
-            foreach (ListViewItem item in listBox_Comparisons.Items)
-                comparisons.Add((Comparison)item.Tag);
+            foreach (var item in listBox_Comparisons.Items)
+                comparisons.Add((Comparison)item);
             settings.comparisons = comparisons;
 
             // Get output path from file select prompt

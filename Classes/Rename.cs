@@ -27,15 +27,15 @@ namespace P5RFlagComparer
         private void RenameSelection(object sender)
         {
             string ctrlName = ((Control)sender).Name;
-            if (ctrlName == "listView_EnabledFlags" || ctrlName == "listView_DisabledFlags"
-                || ctrlName == "listView_SetCounts" || ctrlName == "listView_UnsetCounts")
+            if (ctrlName == "listBox_EnabledFlags" || ctrlName == "listBox_DisabledFlags"
+                || ctrlName == "listBox_SetCounts" || ctrlName == "listBox_UnsetCounts")
             {
-                ListView listView = (ListView)sender;
+                ListBox listBox = (ListBox)sender;
 
-                if (listView.SelectedIndices.Count <= 0)
+                if (listBox.SelectedIndices.Count <= 0)
                     return;
 
-                RenameItems(listView, ctrlName.Contains("Count"));
+                RenameItems(listBox, ctrlName.Contains("Count"));
             }
             else
                 RenameComparison();
@@ -62,9 +62,9 @@ namespace P5RFlagComparer
                 bool nameTaken = false;
                 while (true)
                 {
-                    foreach (ListViewItem item in listBox_Comparisons.Items)
+                    foreach (Comparison item in listBox_Comparisons.Items)
                     {
-                        if (item.Text == name)
+                        if (item.Name == name)
                         {
                             i++;
                             name = newName + " " + i;
@@ -75,7 +75,7 @@ namespace P5RFlagComparer
                         break;
                 }
 
-                // Set comparison in listView to new name
+                // Set comparison in listBox to new name
                 comparison.Name = name;
 
                 if (chk_AutoRename.Checked && name != "" && name != "Untitled")
@@ -85,20 +85,13 @@ namespace P5RFlagComparer
 
         private void RenameAllItems(string name)
         {
-            foreach (ListView listView in new ListView[] { listView_EnabledFlags, listView_DisabledFlags, listView_SetCounts, listView_UnsetCounts })
+            foreach (ListBox listBox in new ListBox[] { listBox_EnabledFlags, listBox_DisabledFlags, listBox_SetCounts, listBox_UnsetCounts })
             {
-                bool isCount = listView.Name.Contains("Count");
+                bool isCount = listBox.Name.Contains("Count");
 
-                foreach (ListViewItem item in listView.Items)
+                foreach (BitFlag flag in listBox.Items)
                 {
-                    if (!item.Text.Contains("//"))
-                    {
-                        BitFlag flag = (BitFlag)item.Tag;
-                        if (!isCount)
-                            item.Text = $"{GetFormattedFlag(flag.Id)} // {SetNewName(name, flag.Id, isCount)}";
-                        else
-                            item.Text = $"{flag.Id}: {flag.Value} // {SetNewName(name, flag.Id, isCount)}";
-                    }
+                    SetNewName(name, flag.Id, isCount);
                 }
             }
         }
@@ -153,36 +146,29 @@ namespace P5RFlagComparer
             return newName;
         }
 
-        private void RenameItems(ListView listView, bool isCount = false)
+        private void RenameItems(ListBox listBox, bool isCount = false)
         {
-            if (listView.SelectedIndices.Count <= 0)
+            if (listBox.SelectedIndices.Count <= 0)
                 return;
 
             List<BitFlag> mapping = settings.flagMappings;
             if (isCount)
                 mapping = settings.countMappings;
 
-            BitFlag selectedFlag = (BitFlag)listView.Items[listView.SelectedIndices[listBox_Comparisons.SelectedIndices.Count - 1]].Tag;
+            BitFlag selectedFlag = (BitFlag)listBox.Items[listBox.SelectedIndices[listBox_Comparisons.SelectedIndices.Count - 1]];
             RenameForm renameForm = new RenameForm("Rename", GetMappedName(selectedFlag.Id, mapping));
             var result = renameForm.ShowDialog();
             if (result == DialogResult.OK)
             {
                 string newName = renameForm.RenameText;
 
-                foreach (int index in listView.SelectedIndices)
+                foreach (int index in listBox.SelectedIndices)
                 {
-                    BitFlag flag = (BitFlag)listView.Items[index].Tag;
+                    BitFlag flag = (BitFlag)listBox.Items[index];
                     string name = SetNewName(newName, flag.Id, isCount);
-
-                    if (isCount)
-                        listView.Items[index].Text = $"{flag.Id}: {flag.Value}";
-                    else
-                        listView.Items[index].Text = $"{GetFormattedFlag(flag.Id)}";
-
-                    if (!string.IsNullOrEmpty(name))
-                        listView.Items[index].Text += $" // {name}";
                 }
             }
+            SetupListbox();
         }
 
         private string GetFormattedFlag(int flagId)

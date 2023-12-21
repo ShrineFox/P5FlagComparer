@@ -38,15 +38,15 @@ namespace P5RFlagComparer
             this.tabPage_BitFlags = new System.Windows.Forms.TabPage();
             this.tlp_BitFlags = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox_NewDisabled = new System.Windows.Forms.GroupBox();
-            this.listView_DisabledFlags = new System.Windows.Forms.ListView();
+            this.listBox_DisabledFlags = new System.Windows.Forms.ListBox();
             this.groupBox_NewEnabled = new System.Windows.Forms.GroupBox();
-            this.listView_EnabledFlags = new System.Windows.Forms.ListView();
+            this.listBox_EnabledFlags = new System.Windows.Forms.ListBox();
             this.tabPage_Count = new System.Windows.Forms.TabPage();
             this.tlp_Count = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox_UnsetCount = new System.Windows.Forms.GroupBox();
-            this.listView_UnsetCounts = new System.Windows.Forms.ListView();
+            this.listBox_UnsetCounts = new System.Windows.Forms.ListBox();
             this.groupBox_NewCount = new System.Windows.Forms.GroupBox();
-            this.listView_SetCounts = new System.Windows.Forms.ListView();
+            this.listBox_SetCounts = new System.Windows.Forms.ListBox();
             this.tlp_Checkboxes = new System.Windows.Forms.TableLayoutPanel();
             this.chk_AutoRename = new System.Windows.Forms.CheckBox();
             this.chkBox_Sections = new System.Windows.Forms.CheckBox();
@@ -153,7 +153,7 @@ namespace P5RFlagComparer
             // 
             // groupBox_NewDisabled
             // 
-            this.groupBox_NewDisabled.Controls.Add(this.listView_DisabledFlags);
+            this.groupBox_NewDisabled.Controls.Add(this.listBox_DisabledFlags);
             this.groupBox_NewDisabled.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_NewDisabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.groupBox_NewDisabled.Location = new System.Drawing.Point(0, 173);
@@ -165,22 +165,20 @@ namespace P5RFlagComparer
             this.groupBox_NewDisabled.TabStop = false;
             this.groupBox_NewDisabled.Text = "Newly Disabled Flags";
             // 
-            // listView_DisabledFlags
+            // listBox_DisabledFlags
             // 
-            this.listView_DisabledFlags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.listView_DisabledFlags.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_DisabledFlags.ForeColor = System.Drawing.Color.Silver;
-            this.listView_DisabledFlags.HideSelection = false;
-            this.listView_DisabledFlags.Location = new System.Drawing.Point(0, 19);
-            this.listView_DisabledFlags.Name = "listView_DisabledFlags";
-            this.listView_DisabledFlags.Size = new System.Drawing.Size(446, 155);
-            this.listView_DisabledFlags.TabIndex = 1;
-            this.listView_DisabledFlags.UseCompatibleStateImageBehavior = false;
+            this.listBox_DisabledFlags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.listBox_DisabledFlags.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox_DisabledFlags.ForeColor = System.Drawing.Color.Silver;
+            this.listBox_DisabledFlags.Location = new System.Drawing.Point(0, 19);
+            this.listBox_DisabledFlags.Name = "listBox_DisabledFlags";
+            this.listBox_DisabledFlags.Size = new System.Drawing.Size(446, 155);
+            this.listBox_DisabledFlags.TabIndex = 1;
             // 
             // groupBox_NewEnabled
             // 
             this.groupBox_NewEnabled.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.groupBox_NewEnabled.Controls.Add(this.listView_EnabledFlags);
+            this.groupBox_NewEnabled.Controls.Add(this.listBox_EnabledFlags);
             this.groupBox_NewEnabled.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_NewEnabled.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.groupBox_NewEnabled.Location = new System.Drawing.Point(0, 0);
@@ -192,17 +190,15 @@ namespace P5RFlagComparer
             this.groupBox_NewEnabled.TabStop = false;
             this.groupBox_NewEnabled.Text = "Newly Enabled Flags";
             // 
-            // listView_EnabledFlags
+            // listBox_EnabledFlags
             // 
-            this.listView_EnabledFlags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(73)))), ((int)(((byte)(65)))));
-            this.listView_EnabledFlags.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_EnabledFlags.ForeColor = System.Drawing.Color.Silver;
-            this.listView_EnabledFlags.HideSelection = false;
-            this.listView_EnabledFlags.Location = new System.Drawing.Point(0, 19);
-            this.listView_EnabledFlags.Name = "listView_EnabledFlags";
-            this.listView_EnabledFlags.Size = new System.Drawing.Size(446, 154);
-            this.listView_EnabledFlags.TabIndex = 0;
-            this.listView_EnabledFlags.UseCompatibleStateImageBehavior = false;
+            this.listBox_EnabledFlags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(73)))), ((int)(((byte)(65)))));
+            this.listBox_EnabledFlags.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox_EnabledFlags.ForeColor = System.Drawing.Color.Silver;
+            this.listBox_EnabledFlags.Location = new System.Drawing.Point(0, 19);
+            this.listBox_EnabledFlags.Name = "listBox_EnabledFlags";
+            this.listBox_EnabledFlags.Size = new System.Drawing.Size(446, 154);
+            this.listBox_EnabledFlags.TabIndex = 0;
             // 
             // tabPage_Count
             // 
@@ -235,7 +231,7 @@ namespace P5RFlagComparer
             // 
             // groupBox_UnsetCount
             // 
-            this.groupBox_UnsetCount.Controls.Add(this.listView_UnsetCounts);
+            this.groupBox_UnsetCount.Controls.Add(this.listBox_UnsetCounts);
             this.groupBox_UnsetCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_UnsetCount.Location = new System.Drawing.Point(0, 173);
             this.groupBox_UnsetCount.Margin = new System.Windows.Forms.Padding(0);
@@ -246,22 +242,20 @@ namespace P5RFlagComparer
             this.groupBox_UnsetCount.TabStop = false;
             this.groupBox_UnsetCount.Text = "Newly Unset Count";
             // 
-            // listView_UnsetCounts
+            // listBox_UnsetCounts
             // 
-            this.listView_UnsetCounts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.listView_UnsetCounts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_UnsetCounts.ForeColor = System.Drawing.Color.Silver;
-            this.listView_UnsetCounts.HideSelection = false;
-            this.listView_UnsetCounts.Location = new System.Drawing.Point(0, 25);
-            this.listView_UnsetCounts.Name = "listView_UnsetCounts";
-            this.listView_UnsetCounts.Size = new System.Drawing.Size(446, 149);
-            this.listView_UnsetCounts.TabIndex = 1;
-            this.listView_UnsetCounts.UseCompatibleStateImageBehavior = false;
+            this.listBox_UnsetCounts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.listBox_UnsetCounts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox_UnsetCounts.ForeColor = System.Drawing.Color.Silver;
+            this.listBox_UnsetCounts.Location = new System.Drawing.Point(0, 25);
+            this.listBox_UnsetCounts.Name = "listBox_UnsetCounts";
+            this.listBox_UnsetCounts.Size = new System.Drawing.Size(446, 149);
+            this.listBox_UnsetCounts.TabIndex = 1;
             // 
             // groupBox_NewCount
             // 
             this.groupBox_NewCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
-            this.groupBox_NewCount.Controls.Add(this.listView_SetCounts);
+            this.groupBox_NewCount.Controls.Add(this.listBox_SetCounts);
             this.groupBox_NewCount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_NewCount.Location = new System.Drawing.Point(0, 0);
             this.groupBox_NewCount.Margin = new System.Windows.Forms.Padding(0);
@@ -272,17 +266,15 @@ namespace P5RFlagComparer
             this.groupBox_NewCount.TabStop = false;
             this.groupBox_NewCount.Text = "Newly Changed Count";
             // 
-            // listView_SetCounts
+            // listBox_SetCounts
             // 
-            this.listView_SetCounts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(73)))), ((int)(((byte)(65)))));
-            this.listView_SetCounts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_SetCounts.ForeColor = System.Drawing.Color.Silver;
-            this.listView_SetCounts.HideSelection = false;
-            this.listView_SetCounts.Location = new System.Drawing.Point(0, 25);
-            this.listView_SetCounts.Name = "listView_SetCounts";
-            this.listView_SetCounts.Size = new System.Drawing.Size(446, 148);
-            this.listView_SetCounts.TabIndex = 0;
-            this.listView_SetCounts.UseCompatibleStateImageBehavior = false;
+            this.listBox_SetCounts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(73)))), ((int)(((byte)(65)))));
+            this.listBox_SetCounts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBox_SetCounts.ForeColor = System.Drawing.Color.Silver;
+            this.listBox_SetCounts.Location = new System.Drawing.Point(0, 25);
+            this.listBox_SetCounts.Name = "listBox_SetCounts";
+            this.listBox_SetCounts.Size = new System.Drawing.Size(446, 148);
+            this.listBox_SetCounts.TabIndex = 0;
             // 
             // tlp_Checkboxes
             // 
@@ -520,15 +512,15 @@ namespace P5RFlagComparer
         private TabPage tabPage_BitFlags;
         private TableLayoutPanel tlp_BitFlags;
         private GroupBox groupBox_NewDisabled;
-        private ListView listView_DisabledFlags;
+        private ListBox listBox_DisabledFlags;
         private GroupBox groupBox_NewEnabled;
-        private ListView listView_EnabledFlags;
+        private ListBox listBox_EnabledFlags;
         private TabPage tabPage_Count;
         private TableLayoutPanel tlp_Count;
         private GroupBox groupBox_UnsetCount;
-        private ListView listView_UnsetCounts;
+        private ListBox listBox_UnsetCounts;
         private GroupBox groupBox_NewCount;
-        private ListView listView_SetCounts;
+        private ListBox listBox_SetCounts;
         private Label lbl_TimeStamp;
     }
 }

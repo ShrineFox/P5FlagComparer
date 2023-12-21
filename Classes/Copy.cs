@@ -52,33 +52,33 @@ namespace P5RFlagComparer
         private void CopySelection(object sender)
         {
             string ctrlName = ((Control)sender).Name;
-            if (ctrlName == "listView_EnabledFlags" || ctrlName == "listView_DisabledFlags"
-                || ctrlName == "listView_SetCounts" || ctrlName == "listView_UnsetCounts")
+            if (ctrlName == "listBox_EnabledFlags" || ctrlName == "listBox_DisabledFlags"
+                || ctrlName == "listBox_SetCounts" || ctrlName == "listBox_UnsetCounts")
             {
-                ListView listView = (ListView)sender;
+                ListBox listBox = (ListBox)sender;
 
-                if (listView.SelectedIndices.Count <= 0)
+                if (listBox.SelectedIndices.Count <= 0)
                     return;
 
-                CopyItems(new ListView[] { listView });
+                CopyItems(new ListBox[] { listBox });
             }
             else
-                CopyItems(new ListView[] { listView_EnabledFlags, listView_DisabledFlags, listView_SetCounts, listView_UnsetCounts });
+                CopyItems(new ListBox[] { listBox_EnabledFlags, listBox_DisabledFlags, listBox_SetCounts, listBox_UnsetCounts });
         }
 
-        private void CopyItems(ListView[] listViews)
+        private void CopyItems(ListBox[] listBoxs)
         {
             string clipboardText = "";
 
-            foreach (var listView in listViews)
+            foreach (var listBox in listBoxs)
             {
-                if (listView.SelectedIndices.Count <= 0)
+                if (listBox.SelectedIndices.Count <= 0)
                     return;
 
-                bool isCount = listView.Name.Contains("Count");
-                foreach (int index in listView.SelectedIndices)
+                bool isCount = listBox.Name.Contains("Count");
+                foreach (int index in listBox.SelectedIndices)
                 {
-                    BitFlag bitFlag = (BitFlag)listView.Items[index].Tag;
+                    BitFlag bitFlag = (BitFlag)listBox.Items[index];
 
                     string flagName = "";
                     if (!isCount)
@@ -86,13 +86,13 @@ namespace P5RFlagComparer
                     else
                         flagName = GetMappedName(bitFlag.Id, settings.countMappings);
 
-                    if (listView.Name.Contains("EnabledFlags"))
+                    if (listBox.Name.Contains("EnabledFlags"))
                         clipboardText += $"BIT_ON( {bitFlag.Id} );";
-                    else if (listView.Name.Contains("DisabledFlags"))
+                    else if (listBox.Name.Contains("DisabledFlags"))
                         clipboardText += $"BIT_OFF( {bitFlag.Id} );";
-                    else if (listView.Name.Contains("SetCounts"))
+                    else if (listBox.Name.Contains("SetCounts"))
                         clipboardText += $"SET_COUNT( {bitFlag.Id}, {bitFlag.Value} );";
-                    else if (listView.Name.Contains("UnsetCounts"))
+                    else if (listBox.Name.Contains("UnsetCounts"))
                         clipboardText += $"SET_COUNT( {bitFlag.Id}, 0 );";
 
                     if (!string.IsNullOrEmpty(flagName))
