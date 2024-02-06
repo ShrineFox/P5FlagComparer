@@ -70,6 +70,7 @@ namespace P5RFlagComparer
             // Add to comparison list
             settings.comparisons.Add(comparison);
             SetupListbox();
+            listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
         }
 
 
@@ -81,9 +82,11 @@ namespace P5RFlagComparer
             if (WinFormsDialogs.ShowMessageBox("Remove Comparison?",
                 "Would you like to remove the currently selected comparison from the list?", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
             {
-                settings.comparisons.RemoveAt(listBox_Comparisons.SelectedIndex);
+                foreach (Comparison comparison in listBox_Comparisons.SelectedItems)
+                    settings.comparisons.Remove(comparison);
                 SetupListbox();
             }
+            
         }
     }
 }

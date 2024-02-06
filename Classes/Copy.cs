@@ -16,14 +16,14 @@ namespace P5RFlagComparer
             foreach (var enabledFlag in comparison.EnabledFlags)
             {
                 clipboardText += $"BIT_ON( {GetFormattedFlag(enabledFlag.Id)} );";
-                if (!string.IsNullOrEmpty(GetMappedName(enabledFlag.Id, settings.flagMappings)))
+                if (!string.IsNullOrEmpty(GetMappedName(enabledFlag.Id, settings.flagMappings)) && chk_CopyNames.Checked)
                     clipboardText += $" // {GetMappedName(enabledFlag.Id, settings.flagMappings)}";
                 clipboardText += "\n";
             }
             foreach (var setCount in comparison.SetCounts)
             {
                 clipboardText += $"SET_COUNT( {setCount.Id}, {setCount.Value} );";
-                if (!string.IsNullOrEmpty(GetMappedName(setCount.Id, settings.countMappings)))
+                if (!string.IsNullOrEmpty(GetMappedName(setCount.Id, settings.countMappings)) && chk_CopyNames.Checked)
                     clipboardText += $" // {GetMappedName(setCount.Id, settings.countMappings)}";
                 clipboardText += "\n";
             }

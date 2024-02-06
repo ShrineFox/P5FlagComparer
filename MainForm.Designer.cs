@@ -51,7 +51,6 @@ namespace P5RFlagComparer
             this.chk_AutoRename = new System.Windows.Forms.CheckBox();
             this.chkBox_Sections = new System.Windows.Forms.CheckBox();
             this.lbl_TimeStamp = new System.Windows.Forms.Label();
-            this.ContextMenu_RightClick = new System.Windows.Forms.ContextMenu();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,6 +64,7 @@ namespace P5RFlagComparer
             this.toggleThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox_Comparisons = new System.Windows.Forms.ListBox();
+            this.chk_CopyNames = new System.Windows.Forms.CheckBox();
             this.tlp_Main.SuspendLayout();
             this.metroSetTabControl_FlagType.SuspendLayout();
             this.tabPage_BitFlags.SuspendLayout();
@@ -293,10 +293,12 @@ namespace P5RFlagComparer
             // 
             // tlp_Checkboxes
             // 
-            this.tlp_Checkboxes.ColumnCount = 2;
-            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlp_Checkboxes.Controls.Add(this.chk_AutoRename, 1, 0);
+            this.tlp_Checkboxes.ColumnCount = 3;
+            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlp_Checkboxes.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tlp_Checkboxes.Controls.Add(this.chk_AutoRename, 0, 0);
+            this.tlp_Checkboxes.Controls.Add(this.chk_CopyNames, 1, 0);
             this.tlp_Checkboxes.Controls.Add(this.chkBox_Sections, 0, 0);
             this.tlp_Checkboxes.Controls.Add(this.lbl_TimeStamp, 0, 1);
             this.tlp_Checkboxes.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -313,10 +315,10 @@ namespace P5RFlagComparer
             this.chk_AutoRename.AutoSize = true;
             this.chk_AutoRename.Dock = System.Windows.Forms.DockStyle.Left;
             this.chk_AutoRename.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.chk_AutoRename.Location = new System.Drawing.Point(230, 3);
+            this.chk_AutoRename.Location = new System.Drawing.Point(154, 3);
             this.chk_AutoRename.Name = "chk_AutoRename";
             this.chk_AutoRename.Size = new System.Drawing.Size(133, 26);
-            this.chk_AutoRename.TabIndex = 6;
+            this.chk_AutoRename.TabIndex = 8;
             this.chk_AutoRename.Text = "Auto-Rename";
             // 
             // chkBox_Sections
@@ -465,10 +467,22 @@ namespace P5RFlagComparer
             this.listBox_Comparisons.ItemHeight = 20;
             this.listBox_Comparisons.Location = new System.Drawing.Point(0, 0);
             this.listBox_Comparisons.Name = "listBox_Comparisons";
+            this.listBox_Comparisons.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.listBox_Comparisons.Size = new System.Drawing.Size(232, 470);
             this.listBox_Comparisons.TabIndex = 0;
             this.listBox_Comparisons.SelectedIndexChanged += new System.EventHandler(this.SelectedComparison_Changed);
             this.listBox_Comparisons.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
+            // 
+            // chk_CopyNames
+            // 
+            this.chk_CopyNames.AutoSize = true;
+            this.chk_CopyNames.Dock = System.Windows.Forms.DockStyle.Left;
+            this.chk_CopyNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.chk_CopyNames.Location = new System.Drawing.Point(305, 3);
+            this.chk_CopyNames.Name = "chk_CopyNames";
+            this.chk_CopyNames.Size = new System.Drawing.Size(127, 26);
+            this.chk_CopyNames.TabIndex = 6;
+            this.chk_CopyNames.Text = "Copy Names";
             // 
             // MainForm
             // 
@@ -526,12 +540,10 @@ namespace P5RFlagComparer
         private ToolStripMenuItem loadToolStripMenuItem;
         private TableLayoutPanel tlp_Checkboxes;
         private CheckBox chkBox_Sections;
-        private ContextMenu ContextMenu_RightClick;
         private ToolStripMenuItem renameToolStripMenuItem;
         private ToolStripMenuItem deleteToolStripMenuItem;
         private ToolStripMenuItem pasteFlagsToolStripMenuItem;
         private ColumnHeader columnHeader;
-        private CheckBox chk_AutoRename;
         private ToolStripMenuItem copyToolStripMenuItem;
         private ToolStripMenuItem copyAllToolStripMenuItem;
         private SplitContainer splitContainer1;
@@ -551,5 +563,7 @@ namespace P5RFlagComparer
         private ListBox listBox_SetCounts;
         private Label lbl_TimeStamp;
         private ToolStripMenuItem toggleThemeToolStripMenuItem;
+        private CheckBox chk_AutoRename;
+        private CheckBox chk_CopyNames;
     }
 }
