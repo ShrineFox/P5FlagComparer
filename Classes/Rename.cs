@@ -78,7 +78,7 @@ namespace P5RFlagComparer
                 // Set comparison in listBox to new name
                 comparison.Name = name;
 
-                if (chk_AutoRename.Checked && name != "" && name != "Untitled")
+                if (chk_AutoRename.Checked)
                     RenameAllItems(name);
 
                 SetupListbox();
@@ -93,7 +93,9 @@ namespace P5RFlagComparer
 
                 foreach (BitFlag flag in listBox.Items)
                 {
-                    SetNewName(name, flag.Id, isCount);
+                    if ((!isCount && !settings.flagMappings.Any(x => x.Id.Equals(flag.Id)))
+                        || isCount && !settings.countMappings.Any(x => x.Id.Equals(flag.Id)))
+                        SetNewName(name, flag.Id, isCount);
                 }
             }
         }
