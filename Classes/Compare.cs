@@ -55,7 +55,15 @@ namespace P5RFlagComparer
                     break;
                 }
 
-                comparison.EnabledFlags.Add(new BitFlag() { Id = Convert.ToInt32(clipboardLines[x]) });
+                string clipBoardLine = clipboardLines[x];
+
+                if (Int32.TryParse(clipBoardLine, out int flagId))
+                {
+                    comparison.EnabledFlags.Add(new BitFlag() { Id = flagId });
+                }
+                else
+                    MessageBox.Show($"Failed to convert to Int32:\n\n{clipBoardLine}");
+
             }
 
             // Set unique placeholder name
