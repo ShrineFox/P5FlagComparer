@@ -2,7 +2,6 @@
 using ShrineFox.IO;
 using System;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Windows.Forms;
 
 namespace P5RFlagComparer

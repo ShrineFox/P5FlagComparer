@@ -195,7 +195,7 @@ namespace P5RFlagComparer
             return name;
         }
 
-        private string GetMappedName(int id, List<BitFlag> list)
+        public string GetMappedName(int id, List<BitFlag> list)
         {
             if (list.Any(x => x.Id.Equals(id)))
                 return list.First(x => x.Id.Equals(id)).Name;

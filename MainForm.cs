@@ -32,7 +32,6 @@ namespace P5RFlagComparer
         {
             public string Name { get; set; } = "Untitled";
             public int Id { get; set; } = 0;
-
             public int Value { get; set; } = 0;
         }
 
@@ -57,6 +56,12 @@ namespace P5RFlagComparer
             
             if (listBox_Comparisons.Items.Count - 1 >= selectedIndex)
                 listBox_Comparisons.SelectedIndex = selectedIndex;
+        }
+
+        private void FlagHistory_Click(object sender, EventArgs e)
+        {
+            FlagHistory flagHistoryForm = new FlagHistory(settings);
+            var result = flagHistoryForm.ShowDialog();
         }
     }
 

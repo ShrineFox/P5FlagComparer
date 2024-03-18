@@ -5,8 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using static P5RFlagComparer.MainForm;
+using static System.Collections.Specialized.BitVector32;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace P5RFlagComparer
 {
@@ -203,6 +207,196 @@ namespace P5RFlagComparer
 
             if (listBox_Comparisons.Items.Count > 1)
                 listBox_Comparisons.SelectedIndex = listBox_Comparisons.Items.Count - 1;
+
+        }
+
+        private void ImportWiki_Click(object sender, EventArgs e)
+        {
+            var filePaths = WinFormsDialogs.SelectFile("Load Wiki Source Text...", true, new string[] { "Text File (.txt)" });
+            if (filePaths == null || filePaths.Count == 0 || string.IsNullOrEmpty(filePaths.First()))
+                return;
+
+            string[] wikiLines = File.ReadAllLines(filePaths.First());
+            for (int i = 0; i < wikiLines.Count(); i++)
+            {
+                string line = wikiLines[i];
+                string[] split = line.Split(new[] { "||" }, StringSplitOptions.None);
+                if (split.Length == 5)
+                {
+                    int sectionID = Convert.ToInt32(split[0].Replace("|","").Replace("(R only)","").Trim());
+                    int flagID = Convert.ToInt32(split[1].Trim());
+                    string flagDescription = split[4].Trim();
+
+                    if (!string.IsNullOrEmpty(flagDescription))
+                    {
+                        flagID = Flag.sRoyalBits[sectionID] + flagID;
+
+                        if (settings.flagMappings.Any(x => x.Id == flagID))
+                        {
+                            var flagMapping = settings.flagMappings.First(x => x.Id == flagID);
+                            if (!flagDescription.Contains("Unused"))
+                                flagMapping.Name = $"[Wiki] {flagDescription}";
+                        }
+                        else
+                            settings.flagMappings.Add(new BitFlag() { Id = flagID, Name = $"[Wiki] {flagDescription}" });
+                    }
+                }
+                else if (split.Length == 3)
+                {
+                    if (!split[1].Contains("(HEX)"))
+                    {
+                        int countID = Convert.ToInt32(split[0].Replace("|","").Trim());
+                        string countDesc = split[2].Trim();
+
+                        if (!string.IsNullOrEmpty(countDesc))
+                        {
+                            if (settings.countMappings.Any(x => x.Id == countID))
+                            {
+                                var countMapping = settings.countMappings.First(x => x.Id == countID);
+                                if (!countDesc.Contains("Unused"))
+                                    countMapping.Name = $"[Wiki] {countDesc}";
+                            }
+                            else
+                                settings.countMappings.Add(new BitFlag() { Id = countID, Name = $"[Wiki] {countDesc}" });
+
+                        }
+                    }
+                }
+            }
+
+            settings.flagMappings = settings.flagMappings.OrderBy(x => x.Id).ToList();
+            settings.countMappings = settings.countMappings.OrderBy(x => x.Id).ToList();
+
+            MessageBox.Show($"Flag and Count mappings from the wiki have been imported!", "Wiki Table Imported Successfully");
+        }
+
+        private void Export_Click(object sender, EventArgs e)
+        {
+            for (int s = 0; s < 5; s++)
+            {
+                string txt = "{| class=\"wikitable sortable" +
+                    "\r\n\"! Section !! ID within section !! Sumbits(P5) !! Sumbits(P5R) !! Description\r\n";
+                for (int i = 0; i < Flag.sRoyalBits[s + 1]; i++)
+                {
+                    txt += "|-\r\n";
+
+                    int royalSumBitsID = Flag.sRoyalBits[s + 1] + i;
+                    int vanillaSumBitsID = Flag.sVanillaBits[s + 1] + i;
+
+                    string desc = "";
+                    string sectionSuffix = "";
+                    if (settings.flagMappings.Any(x => x.Id == royalSumBitsID))
+                    {
+                        desc = settings.flagMappings.First(x => x.Id == royalSumBitsID).Name.Replace("[Wiki] ", "");
+                    }
+                    if (i > Flag.sVanillaBits[s])
+                        sectionSuffix = " (R only)";
+
+                    txt += $"| {s}{sectionSuffix} || {i.ToString("D4")} || {i.ToString("D4")} || {i.ToString("D4")} || {desc}\r\n";
+                }
+                txt += "|}";
+
+                // Get output path from file select prompt
+                var outPaths = WinFormsDialogs.SelectFile($"Save Flag Section {s} Wiki Table...", true, new string[] { "Text File (.txt)" }, true);
+                if (outPaths == null || outPaths.Count == 0 || string.IsNullOrEmpty(outPaths.First()))
+                    return;
+
+                // Ensure output path ends with .txt
+                string outPath = outPaths.First();
+                if (!outPath.ToLower().EndsWith(".txt"))
+                    outPath += ".txt";
+
+                // Save to .json file
+                File.WriteAllText(outPath, txt);
+            }
+
+            string countTxt = "[[Category:Persona 5]]\r\n\r\n==Counters==\r\n{| class=\"wikitable\"\r\n! ID (Dec.) || ID (HEX) || Description";
+            for (int i = 0; i < 256; i++)
+            {
+                string desc = "";
+                if (settings.countMappings.Any(x => x.Id == i))
+                {
+                    desc = settings.countMappings.First(x => x.Id == i).Name.Replace("[Wiki] ", "");
+                }
+                countTxt += "|-\r\n" +
+                    $"| {i.ToString("D4")} || {i.ToString("X")} || {desc}";
+            }
+
+            countTxt += "|}";
+
+            // Get output path from file select prompt
+            var outTxtPaths = WinFormsDialogs.SelectFile($"Save Counters Wiki Table...", true, new string[] { "Text File (.txt)" }, true);
+            if (outTxtPaths == null || outTxtPaths.Count == 0 || string.IsNullOrEmpty(outTxtPaths.First()))
+                return;
+
+            // Ensure output path ends with .txt
+            string outTxtPath = outTxtPaths.First();
+            if (!outTxtPath.ToLower().EndsWith(".txt"))
+                outTxtPath += ".txt";
+
+            // Save to .txt file
+            File.WriteAllText(outTxtPath, countTxt);
+        }
+
+        private void ImportMappings_Click(object sender, EventArgs e)
+        {
+            var filePaths = WinFormsDialogs.SelectFile("Import Mappings From Project...", true, new string[] { "Project JSON (.json)" });
+            if (filePaths == null || filePaths.Count == 0 || string.IsNullOrEmpty(filePaths.First()))
+                return;
+
+            var tempSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(filePaths.First()));
+            SetupListbox();
+
+            settings.flagMappings = tempSettings.flagMappings;
+            settings.countMappings = tempSettings.countMappings;
+
+            MessageBox.Show($"Flag and Count mappings from the selected Project Json have been imported!", "Json Mappings Imported Successfully");
+        }
+
+        private void ExportMappings_Click(object sender, EventArgs e)
+        {
+            string txt = "";
+            for (int s = 0; s < 5; s++)
+            {
+                txt += $"FLAG SECTION {s}\r\n";
+                for (int i = 0; i < Flag.sRoyalBits[s + 1]; i++)
+                {
+                    int royalSumBitsID = Flag.sRoyalBits[s + 1] + i;
+                    int vanillaSumBitsID = Flag.sVanillaBits[s + 1] + i;
+
+                    string desc = "";
+                    if (settings.flagMappings.Any(x => x.Id == royalSumBitsID))
+                    {
+                        desc = settings.flagMappings.First(x => x.Id == royalSumBitsID).Name.Replace("[Wiki] ", "");
+                    }
+
+                    txt += $"{s}:{i} ({royalSumBitsID}) // {desc}\r\n";
+                }
+            }
+
+            txt += $"COUNTERS\r\n";
+            for (int i = 0; i < 256; i++)
+            {
+                string desc = "";
+                if (settings.countMappings.Any(x => x.Id == i))
+                {
+                    desc = settings.countMappings.First(x => x.Id == i).Name.Replace("[Wiki] ", "");
+                }
+                txt += $"{i} // {desc}\r\n";
+            }
+
+            // Get output path from file select prompt
+            var outTxtPaths = WinFormsDialogs.SelectFile($"Save Mappings Txt...", true, new string[] { "Text File (.txt)" }, true);
+            if (outTxtPaths == null || outTxtPaths.Count == 0 || string.IsNullOrEmpty(outTxtPaths.First()))
+                return;
+
+            // Ensure output path ends with .txt
+            string outTxtPath = outTxtPaths.First();
+            if (!outTxtPath.ToLower().EndsWith(".txt"))
+                outTxtPath += ".txt";
+
+            // Save to .txt file
+            File.WriteAllText(outTxtPath, txt);
 
         }
 

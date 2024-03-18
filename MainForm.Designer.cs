@@ -49,6 +49,7 @@ namespace P5RFlagComparer
             this.listBox_SetCounts = new System.Windows.Forms.ListBox();
             this.tlp_Checkboxes = new System.Windows.Forms.TableLayoutPanel();
             this.chk_AutoRename = new System.Windows.Forms.CheckBox();
+            this.chk_CopyNames = new System.Windows.Forms.CheckBox();
             this.chkBox_Sections = new System.Windows.Forms.CheckBox();
             this.lbl_TimeStamp = new System.Windows.Forms.Label();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,11 +61,15 @@ namespace P5RFlagComparer
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importWikiTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportWikiTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importOnlyMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteFlagsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flagHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox_Comparisons = new System.Windows.Forms.ListBox();
-            this.chk_CopyNames = new System.Windows.Forms.CheckBox();
+            this.exportOnlyMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlp_Main.SuspendLayout();
             this.metroSetTabControl_FlagType.SuspendLayout();
             this.tabPage_BitFlags.SuspendLayout();
@@ -321,6 +326,17 @@ namespace P5RFlagComparer
             this.chk_AutoRename.TabIndex = 8;
             this.chk_AutoRename.Text = "Auto-Rename";
             // 
+            // chk_CopyNames
+            // 
+            this.chk_CopyNames.AutoSize = true;
+            this.chk_CopyNames.Dock = System.Windows.Forms.DockStyle.Left;
+            this.chk_CopyNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.chk_CopyNames.Location = new System.Drawing.Point(305, 3);
+            this.chk_CopyNames.Name = "chk_CopyNames";
+            this.chk_CopyNames.Size = new System.Drawing.Size(127, 26);
+            this.chk_CopyNames.TabIndex = 6;
+            this.chk_CopyNames.Text = "Copy Names";
+            // 
             // chkBox_Sections
             // 
             this.chkBox_Sections.AutoSize = true;
@@ -391,7 +407,8 @@ namespace P5RFlagComparer
             this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.pasteFlagsToolStripMenuItem,
-            this.toggleThemeToolStripMenuItem});
+            this.toggleThemeToolStripMenuItem,
+            this.flagHistoryToolStripMenuItem});
             this.menuStrip_Main.Location = new System.Drawing.Point(2, 0);
             this.menuStrip_Main.Name = "menuStrip_Main";
             this.menuStrip_Main.Padding = new System.Windows.Forms.Padding(3, 2, 0, 2);
@@ -403,7 +420,11 @@ namespace P5RFlagComparer
             this.fileToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveToolStripMenuItem,
-            this.loadToolStripMenuItem});
+            this.loadToolStripMenuItem,
+            this.importWikiTableToolStripMenuItem,
+            this.exportWikiTableToolStripMenuItem,
+            this.importOnlyMappingsToolStripMenuItem,
+            this.exportOnlyMappingsToolStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
@@ -413,7 +434,7 @@ namespace P5RFlagComparer
             // 
             this.saveToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.Save_Click);
             // 
@@ -421,9 +442,30 @@ namespace P5RFlagComparer
             // 
             this.loadToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.Load_Click);
+            // 
+            // importWikiTableToolStripMenuItem
+            // 
+            this.importWikiTableToolStripMenuItem.Name = "importWikiTableToolStripMenuItem";
+            this.importWikiTableToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
+            this.importWikiTableToolStripMenuItem.Text = "Import Wiki Table";
+            this.importWikiTableToolStripMenuItem.Click += new System.EventHandler(this.ImportWiki_Click);
+            // 
+            // exportWikiTableToolStripMenuItem
+            // 
+            this.exportWikiTableToolStripMenuItem.Name = "exportWikiTableToolStripMenuItem";
+            this.exportWikiTableToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
+            this.exportWikiTableToolStripMenuItem.Text = "Export Wiki Table";
+            this.exportWikiTableToolStripMenuItem.Click += new System.EventHandler(this.Export_Click);
+            // 
+            // importOnlyMappingsToolStripMenuItem
+            // 
+            this.importOnlyMappingsToolStripMenuItem.Name = "importOnlyMappingsToolStripMenuItem";
+            this.importOnlyMappingsToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
+            this.importOnlyMappingsToolStripMenuItem.Text = "Import Only Mappings...";
+            this.importOnlyMappingsToolStripMenuItem.Click += new System.EventHandler(this.ImportMappings_Click);
             // 
             // pasteFlagsToolStripMenuItem
             // 
@@ -440,6 +482,14 @@ namespace P5RFlagComparer
             this.toggleThemeToolStripMenuItem.Size = new System.Drawing.Size(118, 24);
             this.toggleThemeToolStripMenuItem.Text = "Toggle Theme";
             this.toggleThemeToolStripMenuItem.Click += new System.EventHandler(this.ToggleTheme_Click);
+            // 
+            // flagHistoryToolStripMenuItem
+            // 
+            this.flagHistoryToolStripMenuItem.Name = "flagHistoryToolStripMenuItem";
+            this.flagHistoryToolStripMenuItem.Size = new System.Drawing.Size(102, 24);
+            this.flagHistoryToolStripMenuItem.Text = "Flag History";
+            this.flagHistoryToolStripMenuItem.Visible = false;
+            this.flagHistoryToolStripMenuItem.Click += new System.EventHandler(this.FlagHistory_Click);
             // 
             // splitContainer1
             // 
@@ -473,16 +523,12 @@ namespace P5RFlagComparer
             this.listBox_Comparisons.SelectedIndexChanged += new System.EventHandler(this.SelectedComparison_Changed);
             this.listBox_Comparisons.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             // 
-            // chk_CopyNames
+            // exportOnlyMappingsToolStripMenuItem
             // 
-            this.chk_CopyNames.AutoSize = true;
-            this.chk_CopyNames.Dock = System.Windows.Forms.DockStyle.Left;
-            this.chk_CopyNames.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.chk_CopyNames.Location = new System.Drawing.Point(305, 3);
-            this.chk_CopyNames.Name = "chk_CopyNames";
-            this.chk_CopyNames.Size = new System.Drawing.Size(127, 26);
-            this.chk_CopyNames.TabIndex = 6;
-            this.chk_CopyNames.Text = "Copy Names";
+            this.exportOnlyMappingsToolStripMenuItem.Name = "exportOnlyMappingsToolStripMenuItem";
+            this.exportOnlyMappingsToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
+            this.exportOnlyMappingsToolStripMenuItem.Text = "Export Only Mappings...";
+            this.exportOnlyMappingsToolStripMenuItem.Click += new System.EventHandler(this.ExportMappings_Click);
             // 
             // MainForm
             // 
@@ -565,5 +611,10 @@ namespace P5RFlagComparer
         private ToolStripMenuItem toggleThemeToolStripMenuItem;
         private CheckBox chk_AutoRename;
         private CheckBox chk_CopyNames;
+        private ToolStripMenuItem importWikiTableToolStripMenuItem;
+        private ToolStripMenuItem exportWikiTableToolStripMenuItem;
+        private ToolStripMenuItem importOnlyMappingsToolStripMenuItem;
+        private ToolStripMenuItem flagHistoryToolStripMenuItem;
+        private ToolStripMenuItem exportOnlyMappingsToolStripMenuItem;
     }
 }
