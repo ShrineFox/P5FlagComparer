@@ -64,12 +64,13 @@ namespace P5RFlagComparer
             this.importWikiTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportWikiTableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importOnlyMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportOnlyMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pasteFlagsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toggleThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.flagHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox_Comparisons = new System.Windows.Forms.ListBox();
-            this.exportOnlyMappingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyFlagsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tlp_Main.SuspendLayout();
             this.metroSetTabControl_FlagType.SuspendLayout();
             this.tabPage_BitFlags.SuspendLayout();
@@ -406,6 +407,7 @@ namespace P5RFlagComparer
             this.menuStrip_Main.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.copyFlagsToolStripMenuItem,
             this.pasteFlagsToolStripMenuItem,
             this.toggleThemeToolStripMenuItem,
             this.flagHistoryToolStripMenuItem});
@@ -467,6 +469,13 @@ namespace P5RFlagComparer
             this.importOnlyMappingsToolStripMenuItem.Text = "Import Only Mappings...";
             this.importOnlyMappingsToolStripMenuItem.Click += new System.EventHandler(this.ImportMappings_Click);
             // 
+            // exportOnlyMappingsToolStripMenuItem
+            // 
+            this.exportOnlyMappingsToolStripMenuItem.Name = "exportOnlyMappingsToolStripMenuItem";
+            this.exportOnlyMappingsToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
+            this.exportOnlyMappingsToolStripMenuItem.Text = "Export Only Mappings...";
+            this.exportOnlyMappingsToolStripMenuItem.Click += new System.EventHandler(this.ExportMappings_Click);
+            // 
             // pasteFlagsToolStripMenuItem
             // 
             this.pasteFlagsToolStripMenuItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -523,12 +532,12 @@ namespace P5RFlagComparer
             this.listBox_Comparisons.SelectedIndexChanged += new System.EventHandler(this.SelectedComparison_Changed);
             this.listBox_Comparisons.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Output_Keydown);
             // 
-            // exportOnlyMappingsToolStripMenuItem
+            // copyFlagsToolStripMenuItem
             // 
-            this.exportOnlyMappingsToolStripMenuItem.Name = "exportOnlyMappingsToolStripMenuItem";
-            this.exportOnlyMappingsToolStripMenuItem.Size = new System.Drawing.Size(250, 26);
-            this.exportOnlyMappingsToolStripMenuItem.Text = "Export Only Mappings...";
-            this.exportOnlyMappingsToolStripMenuItem.Click += new System.EventHandler(this.ExportMappings_Click);
+            this.copyFlagsToolStripMenuItem.Name = "copyFlagsToolStripMenuItem";
+            this.copyFlagsToolStripMenuItem.Size = new System.Drawing.Size(95, 24);
+            this.copyFlagsToolStripMenuItem.Text = "Copy Flags";
+            this.copyFlagsToolStripMenuItem.Click += new System.EventHandler(this.CopyFlags_Click);
             // 
             // MainForm
             // 
@@ -616,5 +625,6 @@ namespace P5RFlagComparer
         private ToolStripMenuItem importOnlyMappingsToolStripMenuItem;
         private ToolStripMenuItem flagHistoryToolStripMenuItem;
         private ToolStripMenuItem exportOnlyMappingsToolStripMenuItem;
+        private ToolStripMenuItem copyFlagsToolStripMenuItem;
     }
 }

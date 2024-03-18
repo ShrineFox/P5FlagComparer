@@ -410,7 +410,7 @@ namespace P5RFlagComparer
             CompareFromClipboard();
         }
 
-        private void CopyAll_Click(object sender, EventArgs e)
+        private void CopyFlags_Click(object sender, EventArgs e)
         {
             CopyAllToClipboard();
         }

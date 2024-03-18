@@ -1,6 +1,7 @@
 fileToolStripMenuItem disk
 loadToolStripMenuItem folder_page
 saveToolStripMenuItem disk_multiple
+copyFlagsToolStripMenuItem page_white_copy
 pasteFlagsToolStripMenuItem paste_plain
 deleteToolStripMenuItem delete
 renameToolStripMenuItem textfield_rename
